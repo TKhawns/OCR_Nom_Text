@@ -6,7 +6,6 @@ import { useStoreContext } from '../../contexts/StoreContext';
 import { useMouseContext } from '../../contexts/MouseContext';
 import actionTypes from '../../contexts/StoreContext/actionTypes';
 import mouseActionTypes from '../../contexts/MouseContext/actionType';
-import Draggable from 'react-draggable';
 import {
     getImageSize,
     coordinateFactory,
@@ -18,6 +17,9 @@ import {
 } from '../../utils';
 import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
+import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 let pointsX = [];
 let pointsY = [];
@@ -37,6 +39,8 @@ function SVGWrapper() {
         shapes,
         selLabelType,
         closePointRegion,
+        dragStatus,
+        fullScreen,
     } = state;
     const { shapeStyle, selShapeStyle, drawingShapePathStyle, drawingShapePointStyle, labelStyle } = drawStyle;
     const { mouseCoordinate } = mouseState;
@@ -45,19 +49,24 @@ function SVGWrapper() {
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     //dragging
-    const image = svgRef.current;
     const [isDraw, setIsDraw] = useState(false);
     const handleZoomIn = () => {
         setScale((scale) => scale + 0.1);
-        setIsDraw(!isDraw);
-        console.log(isDraw);
     };
+
     const handleZoomOut = () => {
         setScale((scale) => scale - 0.1);
     };
 
     const [isDragging, setDragging] = useState(false);
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
+    const handle = useFullScreenHandle();
+
+    useEffect(() => {
+        if (fullScreen === actionTypes.FULL_SCREEN) {
+            console.log('fullscreen');
+        }
+    });
 
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
@@ -221,13 +230,18 @@ function SVGWrapper() {
     const isLeftMouseClick = (event) => event.button === 0;
 
     const onSVGMouseDown = (event) => {
-        if (!isDraw) {
+        if (dragStatus === actionTypes.DRAG_IMAGE) {
             const CTM = svgRef.current.getScreenCTM();
             setPrevPosition({
                 x: parseInt((event.clientX - CTM.e) / CTM.a, 10),
                 y: parseInt((event.clientY - CTM.f) / CTM.d, 10),
             });
             setDragging(true);
+            setIsDraw(false);
+        } else if (dragStatus === actionTypes.NOT_DRAG_IMAGE) {
+            // svgRef.current.style.cursor = 'pointer';
+            setDragging(false);
+            setIsDraw(true);
         }
     };
 
@@ -273,7 +287,6 @@ function SVGWrapper() {
 
         if (!isValidCoordinate({ ...mouseCoordinate })) return;
         // check dragging
-
         if (drawStatus === drawStatusTypes.SELECT) {
             dispatch({ type: actionTypes.SET_SEL_SHAPE_INDEX, payload: { selShapeIndex: null } });
             return;
@@ -298,6 +311,7 @@ function SVGWrapper() {
                 case shapeTypes.POLYGON:
                     drawPolygonPoint();
                     break;
+
                 default:
             }
         }
@@ -317,66 +331,73 @@ function SVGWrapper() {
 
     return (
         <div className="svg-wrapper">
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <button onClick={handleZoomIn} style={{ position: 'relative', zIndex: '100' }}>
-                    zoom in
+            <div style={{ display: 'flex', flexDirection: 'column', width: '40px' }}>
+                <button
+                    onClick={handleZoomIn}
+                    style={{ position: 'relative', zIndex: '100', fontSize: '20px', border: ' 1px solid grey' }}
+                >
+                    <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
                 </button>
-                <button onClick={handleZoomOut} style={{ position: 'relative', zIndex: '100' }}>
-                    zoom out
+                <button
+                    onClick={handleZoomOut}
+                    style={{ position: 'relative', zIndex: '100', fontSize: '20px', border: ' 1px solid grey' }}
+                >
+                    <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
                 </button>
             </div>
+            <FullScreen handle={handle}>
+                {imageFiles[selDrawImageIndex] && (
+                    <svg
+                        className="svg-container"
+                        ref={svgRef}
+                        viewBox={`0 0 ${imageSizes[selDrawImageIndex].width} ${imageSizes[selDrawImageIndex].height}`}
+                        onMouseMove={onSVGMouseMove}
+                        onMouseUp={onSVGMouseUp}
+                        onMouseDown={onSVGMouseDown}
+                        style={{ cursor: 'move' }}
+                        transform={`scale(${scale}) translate(${position.x} ${position.y})`}
+                    >
+                        <SVGImage {...imageProps} />
 
-            {imageFiles[selDrawImageIndex] && (
-                <svg
-                    className="svg-container"
-                    ref={svgRef}
-                    viewBox={`0 0 ${imageSizes[selDrawImageIndex].width} ${imageSizes[selDrawImageIndex].height}`}
-                    onMouseMove={onSVGMouseMove}
-                    onMouseUp={onSVGMouseUp}
-                    onMouseDown={onSVGMouseDown}
-                    style={{ cursor: 'move' }}
-                    transform={`scale(${scale}) translate(${position.x} ${position.y})`}
-                >
-                    <SVGImage {...imageProps} />
-
-                    {currentShape && (
-                        <g>
-                            <path d={currentShape.d} style={{ ...drawingShapePathStyle }} />
-                            {currentShape.paths.map((point) => (
-                                <circle
-                                    key={uuidv4()}
-                                    cx={point.x}
-                                    cy={point.y}
-                                    style={{ ...drawingShapePointStyle }}
-                                    r={drawingShapePointStyle.strokeWidth}
-                                />
-                            ))}
-                        </g>
-                    )}
-
-                    {shapes[selDrawImageIndex] &&
-                        shapes[selDrawImageIndex].map((shape, index) =>
-                            !shape.visible ? null : (
-                                <g key={shape.d}>
-                                    <path
-                                        d={shape.d}
-                                        style={shape.isSelect ? { ...selShapeStyle } : { ...shapeStyle }}
-                                        onMouseUp={(event) => onShapeMouseUp(event, index)}
+                        {currentShape && (
+                            <g>
+                                <path d={currentShape.d} style={{ ...drawingShapePathStyle }} />
+                                {currentShape.paths.map((point) => (
+                                    <circle
+                                        key={uuidv4()}
+                                        cx={point.x}
+                                        cy={point.y}
+                                        style={{ ...drawingShapePointStyle }}
+                                        r={drawingShapePointStyle.strokeWidth}
                                     />
-                                    {shape.label && (
-                                        <text
-                                            x={getShapeXYMaxMin(shape.paths).xmin}
-                                            y={getShapeXYMaxMin(shape.paths).ymin}
-                                            style={{ ...labelStyle }}
-                                        >
-                                            {shape.label}
-                                        </text>
-                                    )}
-                                </g>
-                            ),
+                                ))}
+                            </g>
                         )}
-                </svg>
-            )}
+
+                        {shapes[selDrawImageIndex] &&
+                            shapes[selDrawImageIndex].map((shape, index) =>
+                                !shape.visible ? null : (
+                                    <g key={shape.d}>
+                                        <path
+                                            d={shape.d}
+                                            style={shape.isSelect ? { ...selShapeStyle } : { ...shapeStyle }}
+                                            onMouseUp={(event) => onShapeMouseUp(event, index)}
+                                        />
+                                        {shape.label && (
+                                            <text
+                                                x={getShapeXYMaxMin(shape.paths).xmin}
+                                                y={getShapeXYMaxMin(shape.paths).ymin}
+                                                style={{ ...labelStyle }}
+                                            >
+                                                {shape.label}
+                                            </text>
+                                        )}
+                                    </g>
+                                ),
+                            )}
+                    </svg>
+                )}
+            </FullScreen>
         </div>
     );
 }

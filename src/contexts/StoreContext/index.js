@@ -41,6 +41,8 @@ StoreContextProvider.propTypes = {
         xmlPreviewBoxVisible: PropTypes.bool,
         urlBoxVisible: PropTypes.bool,
         closePointRegion: PropTypes.number,
+        dragStatus: PropTypes.string,
+        fullScreen: PropTypes.string,
     }).isRequired,
 };
 

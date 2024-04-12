@@ -4,7 +4,7 @@ import DrawTool from './DrawTool';
 
 const LeftToolbar = () => (
     <>
-        <FileImport />
+        {/* <FileImport /> */}
         <Divider style={{ margin: '0 0 16px 0' }} />
         <DrawTool />
     </>

@@ -119,6 +119,21 @@ const Reducer = (state, action) => {
                 shapes: state.shapes.map((item, index) => (index === state.selDrawImageIndex ? [] : item)),
                 selShapeIndex: null,
             };
+        case actionTypes.DRAG_IMAGE:
+            return {
+                ...state,
+                dragStatus: actionTypes.DRAG_IMAGE,
+            };
+        case actionTypes.NOT_DRAG_IMAGE:
+            return {
+                ...state,
+                dragStatus: actionTypes.NOT_DRAG_IMAGE,
+            };
+        case actionTypes.FULL_SCREEN:
+            return {
+                ...state,
+                fullScreen: actionTypes.FULL_SCREEN,
+            };
         default:
             return state;
     }

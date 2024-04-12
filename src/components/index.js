@@ -11,6 +11,7 @@ import LeftToolbar from './LeftTool';
 import LabelBox from './LabelBox';
 import RightToolbar from './RightTool';
 import XMLPreviewBox from './XMLPreviewBox';
+import TopBar from './TopBar/TopBar';
 import './index.scss';
 
 function LabelImg(props) {
@@ -56,12 +57,13 @@ function LabelImg(props) {
         <StoreContextProvider initialState={initialStoreState}>
             <MouseContextProvider initialState={initialMouseState}>
                 <Row type="flex" justify="center" style={{ height: '100%' }}>
+                    <TopBar />
                     <Col xs={24} style={{ height: '100%' }}>
                         <Row type="flex" justify="center" style={{ height: '100%' }}>
-                            <Col xs={24} md={3} style={{ maxHeight: '100%', overflow: 'auto' }}>
+                            <Col xs={24} md={1} style={{ maxHeight: '100%', overflow: 'hidden' }}>
                                 <LeftToolbar />
                             </Col>
-                            <Col xs={24} md={17} style={{}}>
+                            <Col xs={24} md={19} style={{}}>
                                 <Row type="flex" justify="center" style={{ height: '100%' }}>
                                     <Col xs={24} style={{ height: 'calc(100% - 30px)' }}>
                                         <SVGWrapper />
