@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+html {
+    font-size: 62.5%;
+}
+body {
+    font-family: 'Inter';
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+    font-size: 1.6rem;
+}
+button,
+input {
+    outline: none;
+    border: none;
+}
+a {
+    outline: none;
+    border: none;
+    text-decoration: none;
+    color: #1d5193;
+}

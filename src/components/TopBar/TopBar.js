@@ -5,6 +5,7 @@ import actionTypes from '../../contexts/StoreContext/actionTypes';
 import { imageTypes } from '../../constants';
 import { getURLExtension, imageSizeFactory, generateXML, exportZip } from '../../utils';
 import { type } from '@testing-library/user-event/dist/type';
+
 function TopBar() {
     const { state, dispatch } = useStoreContext();
     const { imageFiles, selDrawImageIndex, imageSizes, drawStatus, shapes, selShapeIndex } = state;
@@ -61,6 +62,7 @@ function TopBar() {
     const onFullScreen = () => {
         dispatch({ type: actionTypes.FULL_SCREEN });
     };
+
     return (
         <div className="top-bar-container">
             <div className="top-bar-content" style={{ rowGap: '0px' }}>

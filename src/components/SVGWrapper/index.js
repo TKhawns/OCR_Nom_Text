@@ -19,7 +19,6 @@ import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
 import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 let pointsX = [];
 let pointsY = [];
@@ -40,7 +39,6 @@ function SVGWrapper() {
         selLabelType,
         closePointRegion,
         dragStatus,
-        fullScreen,
     } = state;
     const { shapeStyle, selShapeStyle, drawingShapePathStyle, drawingShapePointStyle, labelStyle } = drawStyle;
     const { mouseCoordinate } = mouseState;
@@ -60,13 +58,6 @@ function SVGWrapper() {
 
     const [isDragging, setDragging] = useState(false);
     const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
-    const handle = useFullScreenHandle();
-
-    useEffect(() => {
-        if (fullScreen === actionTypes.FULL_SCREEN) {
-            console.log('fullscreen');
-        }
-    });
 
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
@@ -95,7 +86,7 @@ function SVGWrapper() {
         if (imageFiles.length === 0) return;
         if (isValidCoordinate({ ...mouseCoordinate })) {
             svgRef.current.style.cursor = 'crosshair';
-            if (!isDraw) svgRef.current.style.cursor = 'move';
+            if (!isDraw) svgRef.current.style.cursor = 'pointer';
             if (currentShape && currentShape.paths.length > 0) {
                 // change cursor when the current point is equal to the first point
                 if (
@@ -231,6 +222,7 @@ function SVGWrapper() {
 
     const onSVGMouseDown = (event) => {
         if (dragStatus === actionTypes.DRAG_IMAGE) {
+            svgRef.current.style.cursor = 'move';
             const CTM = svgRef.current.getScreenCTM();
             setPrevPosition({
                 x: parseInt((event.clientX - CTM.e) / CTM.a, 10),
@@ -239,7 +231,7 @@ function SVGWrapper() {
             setDragging(true);
             setIsDraw(false);
         } else if (dragStatus === actionTypes.NOT_DRAG_IMAGE) {
-            // svgRef.current.style.cursor = 'pointer';
+            svgRef.current.style.cursor = 'pointer';
             setDragging(false);
             setIsDraw(true);
         }
@@ -330,6 +322,12 @@ function SVGWrapper() {
     };
 
     return (
+        // <FullScreen
+        //     isFullScreen={isFullScreen}
+        //     onChange={(isFull: boolean) => {
+        //         setFullScreen(isFull);
+        //     }}
+        // >
         <div className="svg-wrapper">
             <div style={{ display: 'flex', flexDirection: 'column', width: '40px' }}>
                 <button
@@ -345,60 +343,60 @@ function SVGWrapper() {
                     <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
                 </button>
             </div>
-            <FullScreen handle={handle}>
-                {imageFiles[selDrawImageIndex] && (
-                    <svg
-                        className="svg-container"
-                        ref={svgRef}
-                        viewBox={`0 0 ${imageSizes[selDrawImageIndex].width} ${imageSizes[selDrawImageIndex].height}`}
-                        onMouseMove={onSVGMouseMove}
-                        onMouseUp={onSVGMouseUp}
-                        onMouseDown={onSVGMouseDown}
-                        style={{ cursor: 'move' }}
-                        transform={`scale(${scale}) translate(${position.x} ${position.y})`}
-                    >
-                        <SVGImage {...imageProps} />
 
-                        {currentShape && (
-                            <g>
-                                <path d={currentShape.d} style={{ ...drawingShapePathStyle }} />
-                                {currentShape.paths.map((point) => (
-                                    <circle
-                                        key={uuidv4()}
-                                        cx={point.x}
-                                        cy={point.y}
-                                        style={{ ...drawingShapePointStyle }}
-                                        r={drawingShapePointStyle.strokeWidth}
+            {imageFiles[selDrawImageIndex] && (
+                <svg
+                    className="svg-container"
+                    ref={svgRef}
+                    viewBox={`0 0 ${imageSizes[selDrawImageIndex].width} ${imageSizes[selDrawImageIndex].height}`}
+                    onMouseMove={onSVGMouseMove}
+                    onMouseUp={onSVGMouseUp}
+                    onMouseDown={onSVGMouseDown}
+                    style={{ cursor: 'move' }}
+                    transform={`scale(${scale}) translate(${position.x} ${position.y})`}
+                >
+                    <SVGImage {...imageProps} />
+
+                    {currentShape && (
+                        <g>
+                            <path d={currentShape.d} style={{ ...drawingShapePathStyle }} />
+                            {currentShape.paths.map((point) => (
+                                <circle
+                                    key={uuidv4()}
+                                    cx={point.x}
+                                    cy={point.y}
+                                    style={{ ...drawingShapePointStyle }}
+                                    r={drawingShapePointStyle.strokeWidth}
+                                />
+                            ))}
+                        </g>
+                    )}
+
+                    {shapes[selDrawImageIndex] &&
+                        shapes[selDrawImageIndex].map((shape, index) =>
+                            !shape.visible ? null : (
+                                <g key={shape.d}>
+                                    <path
+                                        d={shape.d}
+                                        style={shape.isSelect ? { ...selShapeStyle } : { ...shapeStyle }}
+                                        onMouseUp={(event) => onShapeMouseUp(event, index)}
                                     />
-                                ))}
-                            </g>
+                                    {shape.label && (
+                                        <text
+                                            x={getShapeXYMaxMin(shape.paths).xmin}
+                                            y={getShapeXYMaxMin(shape.paths).ymin}
+                                            style={{ ...labelStyle }}
+                                        >
+                                            {shape.label}
+                                        </text>
+                                    )}
+                                </g>
+                            ),
                         )}
-
-                        {shapes[selDrawImageIndex] &&
-                            shapes[selDrawImageIndex].map((shape, index) =>
-                                !shape.visible ? null : (
-                                    <g key={shape.d}>
-                                        <path
-                                            d={shape.d}
-                                            style={shape.isSelect ? { ...selShapeStyle } : { ...shapeStyle }}
-                                            onMouseUp={(event) => onShapeMouseUp(event, index)}
-                                        />
-                                        {shape.label && (
-                                            <text
-                                                x={getShapeXYMaxMin(shape.paths).xmin}
-                                                y={getShapeXYMaxMin(shape.paths).ymin}
-                                                style={{ ...labelStyle }}
-                                            >
-                                                {shape.label}
-                                            </text>
-                                        )}
-                                    </g>
-                                ),
-                            )}
-                    </svg>
-                )}
-            </FullScreen>
+                </svg>
+            )}
         </div>
+        // </FullScreen>
     );
 }
 

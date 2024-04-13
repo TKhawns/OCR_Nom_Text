@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import SVGWrapper from './SVGWrapper';
 import { Row, Col } from 'antd';
@@ -13,6 +13,8 @@ import RightToolbar from './RightTool';
 import XMLPreviewBox from './XMLPreviewBox';
 import TopBar from './TopBar/TopBar';
 import './index.scss';
+import actionTypes from '../contexts/StoreContext/actionTypes';
+import { useStoreContext } from '../contexts/StoreContext';
 
 function LabelImg(props) {
     const { labelTypes, closePointRegion } = props;
@@ -44,6 +46,8 @@ function LabelImg(props) {
     const onContextMenu = (event) => {
         event.preventDefault();
     };
+    const { state, dispatch } = useStoreContext();
+    const { fullScreen } = state;
 
     useEffect(() => {
         document.addEventListener('contextmenu', onContextMenu);
@@ -53,6 +57,11 @@ function LabelImg(props) {
         };
     }, []);
 
+    useEffect(() => {
+        if (fullScreen === actionTypes.FULL_SCREEN) {
+            console.log('fullscreen');
+        }
+    });
     return (
         <StoreContextProvider initialState={initialStoreState}>
             <MouseContextProvider initialState={initialMouseState}>
