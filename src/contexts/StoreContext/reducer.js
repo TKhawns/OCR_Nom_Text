@@ -60,11 +60,19 @@ const Reducer = (state, action) => {
                 selPreviewIndex: payload.selPreviewIndex,
                 xmlPreviewBoxVisible: payload.xmlPreviewBoxVisible,
             };
+        case actionTypes.SET_COCO_PREVIEW:
+            return {
+                ...state,
+                selPreviewIndex: payload.selPreviewIndex,
+                xmlPreviewBoxVisible: payload.xmlPreviewBoxVisible,
+            };
+
         case actionTypes.SET_URL_BOX_STATUS:
             return {
                 ...state,
                 urlBoxVisible: payload.urlBoxVisible,
             };
+
         case actionTypes.SET_CURRENT_SHAPE:
             return {
                 ...state,

@@ -1,0 +1,42 @@
+.import-container {
+    background-image: url('https://app.gemoo.com/img/web_tools_background.b9472902.gif');
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    //align-items: center;
+    justify-content: center;
+    min-height: 848px;
+    .import-content {
+        padding-top: 50px;
+        text-align: center;
+        .import-header {
+            color: #1d5193;
+            font-size: 30px;
+            line-height: 1.2;
+            font-weight: 900 !important;
+        }
+        .import-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 264px;
+            box-sizing: border-box;
+            border-radius: 20px;
+            background-color: hsla(0, 0%, 100%, 0.6);
+            margin-top: 70px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+            width: 1030px;
+            .model-option {
+                height: 100%;
+                width: 40%;
+                border: 1px solid red;
+            }
+            .upload-box {
+                height: 100%;
+                width: 60%;
+                border: 1px solid green;
+            }
+        }
+    }
+}

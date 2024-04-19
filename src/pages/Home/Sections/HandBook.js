@@ -1,0 +1,88 @@
+import React from 'react';
+import './Section.scss';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+function Handbook() {
+    let settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        // arrows: false,
+    };
+    return (
+        <div className="section-specialty">
+            <div className="specialty-content">
+                <div className="specialty-body">
+                    <Slider {...settings}>
+                        <a href="https://aws.amazon.com/vi/what-is/ocr/" className="img-custom" target="blank">
+                            <img
+                                className="slide1"
+                                src="https://businesswiki.codx.vn/wp-content/uploads/2023/06/ocr-la-gi-2.jpg"
+                                alt=""
+                            />
+                            <div className="slide-title">OCR là gì & Điều cần biết</div>
+                        </a>
+                        <a className="img-custom" href="https://pixta.vn/data-annotation-la-gi" target="blank">
+                            <img
+                                className="slide1"
+                                src="https://oasisoutsourcing.co.ke/wp-content/uploads/2022/06/software-engineer-statistician-visualizer-analyst-working-project-big-data-conference-big-data-presentation-data-science-concept_335657-1850-1.webp"
+                                alt=""
+                            />
+                            <div className="slide-title">Data annotation?</div>
+                        </a>
+                        <a
+                            className="img-custom"
+                            href="https://aws.amazon.com/vi/what-is/data-labeling/"
+                            target="blank"
+                        >
+                            <img
+                                className="slide1"
+                                src="https://storage.googleapis.com/fastwork-static/bd6c1b6d-317a-4539-beb9-b67f384a73ab.jpg"
+                                alt=""
+                            />
+                            <div className="slide-title">Labeling concepts</div>
+                        </a>
+                        <a className="img-custom" href="https://www.ibm.com/topics/deep-learning" target="blank">
+                            <img
+                                className="slide1"
+                                src="https://lh3.googleusercontent.com/proxy/QlEtfKldpejkXcfqp1MBu9XuIjuVmtH8PWq8SYUP_Pz9TXg4fk0NITH3ELriQUBta_O-GUBrEZ6ykR-MP4VJgxlFw7zPFWjvXSLKWD9QtymD5aoJbaqF0a232cfcK0NHPIZDTjCk1XzXpZpkhlqN"
+                                alt=""
+                            />
+                            <div className="slide-title">Học sâu - Deep learning</div>
+                        </a>
+                        <a
+                            className="img-custom"
+                            href="https://albumentations.ai/docs/getting_started/bounding_boxes_augmentation/"
+                            target="blank"
+                        >
+                            <img
+                                className="slide1"
+                                src="https://raw.githubusercontent.com/EckoTan0804/upic-repo/master/uPic/annotation-convertion-COCO-and-YOLO.png"
+                                alt=""
+                            />
+                            <div className="slide-title">Coco format</div>
+                        </a>
+                        <a
+                            className="img-custom"
+                            href="https://viblo.asia/p/tim-hieu-ve-yolo-trong-bai-toan-real-time-object-detection-yMnKMdvr57P"
+                            target="blank"
+                        >
+                            <img
+                                className="slide1"
+                                src="https://images.viblo.asia/1a2ee016-c5ec-447a-bea2-a27e75e1f352.png"
+                                alt=""
+                            />
+                            <div className="slide-title">Yolo format</div>
+                        </a>
+                    </Slider>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default Handbook;

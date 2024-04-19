@@ -20,5 +20,8 @@ export const shapeTypeOptions = [
 ];
 
 export const defaultSaveFolder = 'labels';
+export const YoloFolderName = 'yolo_format';
+
+export const CocoFolderName = 'coco_format';
 
 export const imageTypes = ['jpg', 'jpeg', 'png'];

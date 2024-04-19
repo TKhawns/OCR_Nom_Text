@@ -49,7 +49,7 @@ function LabelListSetting() {
     );
 
     return (
-        <Dropdown menu={menu} placement="bottomRight" arrow>
+        <Dropdown overlay={menu} placement="bottomRight" arrow>
             <SettingOutlined />
         </Dropdown>
     );

@@ -3,8 +3,8 @@ import { message } from 'antd';
 import { useStoreContext } from '../../contexts/StoreContext';
 import actionTypes from '../../contexts/StoreContext/actionTypes';
 import { imageTypes } from '../../constants';
-import { getURLExtension, imageSizeFactory, generateXML, exportZip } from '../../utils';
-import { type } from '@testing-library/user-event/dist/type';
+import { getURLExtension, imageSizeFactory, generateCoco, exportZip, generateYolo } from '../../utils';
+import { Menu, Dropdown, Button } from 'antd';
 
 function TopBar() {
     const { state, dispatch } = useStoreContext();
@@ -37,12 +37,12 @@ function TopBar() {
     };
 
     const onSaveClick = () => {
-        if (imageFiles.length === 0) {
-            message.info('No images are loaded.');
-            return;
-        }
-        const xmls = imageFiles.map((file, index) => generateXML(file, imageSizes[index], shapes[index]));
-        exportZip(imageFiles, xmls);
+        // if (imageFiles.length === 0) {
+        //     message.info('No images are loaded.');
+        //     return;
+        // }
+        // const xmls = imageFiles.map((file, index) => generateXML(file, imageSizes[index], shapes[index]));
+        // exportZip(imageFiles, xmls);
     };
     const onNextImageClick = () => {
         if (!imageFiles.length || imageFiles.length < 2) return;
@@ -62,6 +62,37 @@ function TopBar() {
     const onFullScreen = () => {
         dispatch({ type: actionTypes.FULL_SCREEN });
     };
+
+    const onCocoDownload = () => {
+        if (imageFiles.length === 0) {
+            message.info('No images are loaded.');
+            return;
+        }
+        const xmls = imageFiles.map((file, index) => generateCoco(file, imageSizes[index], shapes[index]));
+        exportZip(imageFiles, xmls, 'COCO');
+    };
+    const onYoloDownload = () => {
+        if (imageFiles.length === 0) {
+            message.info('No images are loaded.');
+            return;
+        }
+        const xmls = imageFiles.map((file, index) => generateYolo(file, imageSizes[index], shapes[index]));
+        exportZip(imageFiles, xmls, 'YOLO');
+    };
+    const menu = (
+        <Menu>
+            <Menu.Item>
+                <Button type="text" size="small" onClick={onCocoDownload}>
+                    Coco Format
+                </Button>
+            </Menu.Item>
+            <Menu.Item>
+                <Button type="text" size="small" onClick={onYoloDownload}>
+                    Yolo Format
+                </Button>
+            </Menu.Item>
+        </Menu>
+    );
 
     return (
         <div className="top-bar-container">
@@ -103,7 +134,11 @@ function TopBar() {
                                 <path d="M29.131 5l5.257 5.257V35H5V5h24.131zm-.866 17.143H10.51v11.633h17.755V22.143zM10.51 6.224H6.224v27.552h3.062V20.918H29.49v12.858h3.673V10.764l-4.539-4.54h-.97v9.796H10.51V6.224zm8.878 20.205a.612.612 0 01.1 1.216l-.1.008h-6.123a.612.612 0 01-.1-1.216l.1-.008h6.123zm2.271.177c.11.116.178.276.178.435a.648.648 0 01-.178.435.644.644 0 01-.435.177.63.63 0 01-.434-.177.64.64 0 01-.178-.435.64.64 0 01.178-.435.641.641 0 01.87 0zm-4.108-2.626a.612.612 0 01.1 1.216l-.1.008h-4.286a.612.612 0 01-.1-1.216l.1-.008h4.286zm8.878-17.756H11.735v8.572h14.694V6.224zM25.51 7.45v6.122h-3.673V7.45h3.673zm-1.224 1.224H23.06v3.674h1.225V8.673z"></path>
                             </svg>
                         </span>
-                        <span className="tag-name">Save</span>
+                        <span className="tag-name">
+                            <Dropdown overlay={menu} placement="bottomRight" arrow>
+                                <div>Save</div>
+                            </Dropdown>
+                        </span>
                     </button>
                     <button type="button" className="save-button">
                         <span className="save-icon">
@@ -161,7 +196,7 @@ function TopBar() {
                                 <path d="M239.825 534.975l409.8 400.525c19.75 19.325 51.825 19.325 71.575 0l47.8-46.7c19.75-19.3 19.75-50.55.075-69.875L444.325 500l324.75-318.925A48.675 48.675 0 00769 111.2l-47.8-46.7a51.45 51.45 0 00-71.575 0L239.825 465a48.675 48.675 0 000 69.95z"></path>
                             </svg>
                         </span>
-                        <span>Prev Img</span>
+                        <span>Prev img</span>
                     </button>
                     <button type="button" className="center-button" onClick={onNextImageClick}>
                         <span className="prev-image">
@@ -176,7 +211,7 @@ function TopBar() {
                                 <path d="M769 534.975L359.2 935.5a51.45 51.45 0 01-71.575 0l-47.8-46.7a48.675 48.675 0 01-.075-69.875L564.5 500 239.75 181.075a48.675 48.675 0 01.075-69.875l47.8-46.7a51.45 51.45 0 0171.575 0L769 465c19.75 19.325 19.75 50.625 0 69.95z"></path>
                             </svg>
                         </span>
-                        <span>Next Img</span>
+                        <span>Next img</span>
                     </button>
                 </div>
 

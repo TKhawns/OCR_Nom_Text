@@ -200,12 +200,10 @@ function SVGWrapper() {
             pointsX = [];
             pointsY = [];
             for (var i = 0; i < currentShape.paths.length; i++) {
-                // console.log(currentShape.paths[i].x);
-                // console.log(currentShape.paths[i].y);
                 pointsX.push(currentShape.paths[i].x);
                 pointsY.push(currentShape.paths[i].y);
             }
-            console.log(pointsX);
+
             if (currentShape.exactPathCount === currentShape.paths.length) return;
             const currentShapeCopy = cloneDeep(currentShape);
             currentShapeCopy.paths[currentShapeCopy.paths.length - 1] = { ...mouseCoordinate };

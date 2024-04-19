@@ -1,8 +1,9 @@
 import { j2xParser as J2xParser } from 'fast-xml-parser';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { defaultSaveFolder } from '../constants';
-import { pointsX, pointsY } from '../components/SVGWrapper';
+import { CocoFolderName, YoloFolderName, defaultSaveFolder } from '../constants';
+import { pointsX } from '../components/SVGWrapper';
+
 export const getImage = (imageUrl, fileName = 'image.jpg') =>
     new Promise((resolve, reject) => {
         const img = new Image();
@@ -48,26 +49,6 @@ export const getURLExtension = (url) => url.trim().split('.')[1];
 
 export const coordinateFactory = ({ x, y }) => ({ x, y });
 
-export const getSVGPathD = (paths, isFinish) => {
-    let d = paths.reduce((accumulator, currentValue, currentIndex) => {
-        if (currentIndex === 0) return `${accumulator}M${currentValue.x},${currentValue.y} `;
-        return `${accumulator}L${currentValue.x},${currentValue.y} `;
-    }, '');
-    if (isFinish) d += 'Z';
-    return d;
-};
-
-export function getShapeXYMaxMin(paths) {
-    console.log(pointsX);
-    return {
-        array: pointsX,
-        xmin: paths.reduce((acc, cur) => (acc < cur.x ? acc : cur.x), Number.MAX_SAFE_INTEGER),
-        ymin: paths.reduce((acc, cur) => (acc < cur.y ? acc : cur.y), Number.MAX_SAFE_INTEGER),
-        xmax: paths.reduce((acc, cur) => (acc > cur.x ? acc : cur.x), -Number.MAX_SAFE_INTEGER),
-        ymax: paths.reduce((acc, cur) => (acc > cur.y ? acc : cur.y), -Number.MAX_SAFE_INTEGER),
-    };
-}
-
 export const drawStyleFactory = (value) => ({
     shapeStyle: {
         cursor: 'pointer',
@@ -105,6 +86,25 @@ export const drawStyleFactory = (value) => ({
     },
 });
 
+export const getSVGPathD = (paths, isFinish) => {
+    let d = paths.reduce((accumulator, currentValue, currentIndex) => {
+        if (currentIndex === 0) return `${accumulator}M${currentValue.x},${currentValue.y} `;
+        return `${accumulator}L${currentValue.x},${currentValue.y} `;
+    }, '');
+    if (isFinish) d += 'Z';
+    return d;
+};
+
+export function getShapeXYMaxMin(paths) {
+    return {
+        array: pointsX,
+        xmin: paths.reduce((acc, cur) => (acc < cur.x ? acc : cur.x), Number.MAX_SAFE_INTEGER),
+        ymin: paths.reduce((acc, cur) => (acc < cur.y ? acc : cur.y), Number.MAX_SAFE_INTEGER),
+        xmax: paths.reduce((acc, cur) => (acc > cur.x ? acc : cur.x), -Number.MAX_SAFE_INTEGER),
+        ymax: paths.reduce((acc, cur) => (acc > cur.y ? acc : cur.y), -Number.MAX_SAFE_INTEGER),
+    };
+}
+
 export const shapeFactory = (coordinate) => {
     const paths = [coordinate];
     const d = getSVGPathD(paths, false);
@@ -139,9 +139,39 @@ export const annotationFactory = (file) => ({
     segmented: 0,
     object: [],
 });
+export const annotationCocoTxt = (label_in, paths) => {
+    const x_min = paths.reduce((acc, cur) => (acc < cur.x ? acc : cur.x), Number.MAX_SAFE_INTEGER);
+    const y_min = paths.reduce((acc, cur) => (acc < cur.y ? acc : cur.y), Number.MAX_SAFE_INTEGER);
+    const xmax = paths.reduce((acc, cur) => (acc > cur.x ? acc : cur.x), -Number.MAX_SAFE_INTEGER);
+    const ymax = paths.reduce((acc, cur) => (acc > cur.y ? acc : cur.y), -Number.MAX_SAFE_INTEGER);
+    return [
+        {
+            label: label_in,
+            xmin: x_min,
+            ymin: y_min,
+            width: xmax - x_min,
+            height: ymax - y_min,
+        },
+    ];
+};
+export const annotationYoloTxt = (label_in, paths, size) => {
+    const x_min = paths.reduce((acc, cur) => (acc < cur.x ? acc : cur.x), Number.MAX_SAFE_INTEGER);
+    const y_min = paths.reduce((acc, cur) => (acc < cur.y ? acc : cur.y), Number.MAX_SAFE_INTEGER);
+    const xmax = paths.reduce((acc, cur) => (acc > cur.x ? acc : cur.x), -Number.MAX_SAFE_INTEGER);
+    const ymax = paths.reduce((acc, cur) => (acc > cur.y ? acc : cur.y), -Number.MAX_SAFE_INTEGER);
+    return [
+        {
+            label: label_in,
+            x_center: (x_min + xmax) / 2 / size.width,
+            y_center: (y_min + ymax) / 2 / size.height,
+            width: (xmax - x_min) / size.width,
+            height: (ymax - y_min) / size.height,
+        },
+    ];
+};
 
 export const annotationObjectFactory = (shape) => ({
-    name: shape.label,
+    label: shape.label,
     pose: 'Unspecified',
     truncated: 0,
     difficult: 0,
@@ -164,11 +194,12 @@ export const convertDateToString = (dateObj) => {
     return `${year}${fMonth}${fDate}${fHour}${fMinute}${fSecond}`;
 };
 
+// xml format
 export const generateXML = (file, size, shapes) => {
     const annotation = annotationFactory(file);
     annotation.size = imageSizeFactory(size);
-    annotation.object = shapes.map((shape) => annotationObjectFactory(shape));
-    const obj = { annotation };
+    annotation.object = shapes.map((shape) => annotationObjectFactory(shape, size));
+    const obj = annotation;
     let xmlStr = '';
     try {
         xmlStr = new J2xParser({ format: true }).parse(obj);
@@ -176,6 +207,34 @@ export const generateXML = (file, size, shapes) => {
         console.error(error.message);
     }
     return xmlStr;
+};
+
+// coco RECTANGLE format
+export const generateCoco = (file, size, shapes) => {
+    const annotation = annotationFactory(file);
+    annotation.object = shapes.map((shape) => annotationObjectFactory(shape, size));
+    const text = shapes.map((shape) => annotationCocoTxt(shape.label, shape.paths));
+    let arr = [];
+    text.forEach((item) => {
+        const { label, xmin, ymin, width, height } = item[0];
+        arr.push([label, xmin, ymin, width, height]);
+    });
+    return JSON.stringify(arr);
+};
+
+// yolo RECTANGLE format
+export const generateYolo = (file, size, shapes) => {
+    const annotation = annotationFactory(file);
+    annotation.size = imageSizeFactory(size);
+    annotation.object = shapes.map((shape) => annotationObjectFactory(shape, size));
+
+    const text = shapes.map((shape) => annotationYoloTxt(shape.label, shape.paths, annotation.size));
+    let arr = [];
+    text.forEach((item) => {
+        const { label, x_center, y_center, width, height } = item[0];
+        arr.push([label, x_center, y_center, width, height]);
+    });
+    return JSON.stringify(arr);
 };
 
 export const exportXML = (xmlStr, fileName = 'label.xml') => {
@@ -188,12 +247,16 @@ export const exportXML = (xmlStr, fileName = 'label.xml') => {
     a.click();
 };
 
-export const exportZip = (files, xmls) => {
+// figure zip file
+export const exportZip = (files, xmls, type) => {
     const zip = new JSZip();
-    const folder = zip.folder(defaultSaveFolder);
+    let folder = zip.folder(CocoFolderName);
+    if (type === 'YOLO') {
+        folder = zip.folder(YoloFolderName);
+    }
     files.forEach((file, index) => {
         folder.file(file.name, file);
-        folder.file(`${file.name.split('.')[0]}.xml`, xmls[index]);
+        folder.file(`${file.name.split('.')[0]}.txt`, xmls[index]);
     });
     zip.generateAsync({ type: 'blob' }).then((content) => {
         saveAs(content, `${convertDateToString(new Date())}.zip`);
