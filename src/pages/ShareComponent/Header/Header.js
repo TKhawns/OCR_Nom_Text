@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePen } from '@fortawesome/free-solid-svg-icons';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../components/redux/authSlice';
 import { useState } from 'react';
@@ -17,11 +16,9 @@ function Header() {
         setIsToggle(!isToggle);
     };
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleLogOut = () => {
         dispatch(logout());
-        navigate(0);
     };
     return (
         <div className="header-container">
@@ -83,7 +80,7 @@ function Header() {
                                                 <span className="text">U</span>
                                             </div>
                                         </div>
-                                        <span> {userData.fullName} </span>
+                                        <span> Xin chào, {userData.fullName} </span>
                                     </div>
                                     {isToggle ? (
                                         <div className="dropdown-menu">
@@ -98,19 +95,19 @@ function Header() {
                                                     <span className="email">{userData.Email}</span>
                                                 </div>
                                             </div>
-                                            <a className="account-link">
+                                            <div className="account-link">
                                                 <i className="icon">
                                                     <FontAwesomeIcon icon={faSquarePen} />
                                                 </i>
                                                 <span className="title">Cập nhật thông tin</span>
-                                            </a>
-                                            <a className="account-link">
+                                            </div>
+                                            <div className="account-link">
                                                 <i className="icon">
                                                     <FontAwesomeIcon icon={faKey} />
                                                 </i>
                                                 <span className="title">Đổi mật khẩu</span>
-                                            </a>
-                                            <a className="account-link" onClick={handleLogOut}>
+                                            </div>
+                                            <a href="/" className="account-link" onClick={handleLogOut}>
                                                 <i className="icon">
                                                     <FontAwesomeIcon icon={faRightFromBracket} />
                                                 </i>

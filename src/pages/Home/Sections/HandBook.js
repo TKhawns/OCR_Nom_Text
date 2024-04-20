@@ -49,7 +49,7 @@ function Handbook() {
                         <a className="img-custom" href="https://www.ibm.com/topics/deep-learning" target="blank">
                             <img
                                 className="slide1"
-                                src="https://lh3.googleusercontent.com/proxy/QlEtfKldpejkXcfqp1MBu9XuIjuVmtH8PWq8SYUP_Pz9TXg4fk0NITH3ELriQUBta_O-GUBrEZ6ykR-MP4VJgxlFw7zPFWjvXSLKWD9QtymD5aoJbaqF0a232cfcK0NHPIZDTjCk1XzXpZpkhlqN"
+                                src="https://www.salesforce.com/eu/blog/wp-content/uploads/sites/14/2023/09/deep-learning-ai-business.jpg"
                                 alt=""
                             />
                             <div className="slide-title">Học sâu - Deep learning</div>

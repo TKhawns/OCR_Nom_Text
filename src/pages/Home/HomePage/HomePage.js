@@ -6,6 +6,8 @@ import Footer from '../../ShareComponent/Footer/Footer';
 import Handbook from '../Sections/HandBook';
 import Gallery from '../Sections/Gallery';
 function HomePage() {
+    const userRedux = JSON.parse(localStorage.getItem('persist:user'));
+    let userData = JSON.parse(userRedux.authSlice).user;
     return (
         <div>
             <Header />
@@ -23,12 +25,12 @@ function HomePage() {
                                 <div className="feature">Don’t have to wait for an acceptance.</div>
                                 <div className="feature">Limit models</div>
                             </div>
-                            <div className="project-button">
+                            <a href="/import" className="project-button">
                                 <div className="title">Start now</div>
                                 <div className="icon">
                                     <FontAwesomeIcon icon={faArrowRight} />
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div className="right">
                             <div className="left-title">Custom Project</div>
@@ -40,12 +42,21 @@ function HomePage() {
                                 <div className="feature">Don’t have to wait for an acceptance.</div>
                                 <div className="feature">Limit models</div>
                             </div>
-                            <div className="project-button">
-                                <div className="title">Sign up now</div>
-                                <div className="icon">
-                                    <FontAwesomeIcon icon={faArrowRight} />
-                                </div>
-                            </div>
+                            {userData ? (
+                                <a href="/import" className="project-button">
+                                    <div className="title">Start now</div>
+                                    <div className="icon">
+                                        <FontAwesomeIcon icon={faArrowRight} />
+                                    </div>
+                                </a>
+                            ) : (
+                                <a href="/login" className="project-button">
+                                    <div className="title">Login now</div>
+                                    <div className="icon">
+                                        <FontAwesomeIcon icon={faArrowRight} />
+                                    </div>
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>

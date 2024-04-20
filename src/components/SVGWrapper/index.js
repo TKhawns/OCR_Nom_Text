@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { cloneDeep } from 'lodash';
+import { clone, cloneDeep } from 'lodash';
 import SVGImage from './SVGImage';
 import { useStoreContext } from '../../contexts/StoreContext';
 import { useMouseContext } from '../../contexts/MouseContext';
@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 let pointsX = [];
 let pointsY = [];
+
 function SVGWrapper() {
     const svgRef = useRef(null);
     const { state, dispatch } = useStoreContext();
@@ -141,6 +142,7 @@ function SVGWrapper() {
         const point3 = coordinate;
         const point2 = { x: point1.x, y: point3.y };
         const point4 = { x: point3.x, y: point1.y };
+
         currentShapeCopy.paths = [point1, point2, point3, point4, point1];
         currentShapeCopy.exactPathCount = currentShapeCopy.paths.length - 1;
         currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, false);
@@ -209,6 +211,7 @@ function SVGWrapper() {
             currentShapeCopy.paths[currentShapeCopy.paths.length - 1] = { ...mouseCoordinate };
             currentShapeCopy.exactPathCount += 1;
             currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, false);
+
             dispatch({
                 type: actionTypes.SET_CURRENT_SHAPE,
                 payload: { currentShape: currentShapeCopy },
@@ -257,6 +260,7 @@ function SVGWrapper() {
         });
 
         if ((drawStatus !== drawStatusTypes.DRAWING && !currentShape) || !isDraw) return;
+
         switch (selShapeType) {
             case shapeTypes.RECTANGLE:
                 movingRectangle(coordinate);
@@ -301,7 +305,6 @@ function SVGWrapper() {
                 case shapeTypes.POLYGON:
                     drawPolygonPoint();
                     break;
-
                 default:
             }
         }
@@ -320,12 +323,6 @@ function SVGWrapper() {
     };
 
     return (
-        // <FullScreen
-        //     isFullScreen={isFullScreen}
-        //     onChange={(isFull: boolean) => {
-        //         setFullScreen(isFull);
-        //     }}
-        // >
         <div className="svg-wrapper">
             <div style={{ display: 'flex', flexDirection: 'column', width: '40px' }}>
                 <button
@@ -394,7 +391,6 @@ function SVGWrapper() {
                 </svg>
             )}
         </div>
-        // </FullScreen>
     );
 }
 
