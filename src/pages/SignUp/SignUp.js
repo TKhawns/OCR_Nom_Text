@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { handleSignUpApi } from '../../components/Services/userServices';
 import { loginSuccess } from '../../components/redux/authSlice';
+import { FormattedMessage } from 'react-intl';
+
 function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -67,23 +69,30 @@ function SignUp() {
                 <div className="signup-content">
                     <div className="signup-inner">
                         <div className="side-bar">
-                            <div className="title">Vì sao bạn nên đăng ký</div>
+                            <div className="title">
+                                <FormattedMessage id="signup.reason" />
+                            </div>
                             <div className="text">
                                 <p>
-                                    Tham gia cộng đồng Han Nom annotation - FIT sẽ giúp bạn nâng cao khả năng làm việc
-                                    cùng các mô hình. Bạn có thể tự tạo ra những mô hình đào tạo từ chính bộ dữ liệu của
-                                    riêng mình trong thời gian ngắn, hoặc thoải mái sử dụng các model đã được đào tạo
-                                    bởi cộng đồng dưới sự giám sát của chúng tôi với sự chọn lọc dữ liệu.
+                                    <FormattedMessage id="signup.reason-content" />
                                 </p>
                             </div>
                             <ul className="list">
-                                <li className="item">"Become a Trainer" - Tạo model đào tạo của riêng mình</li>
-                                <li className="item">Sử dụng nhiều loại mô hình khác nhau từ cộng đồng</li>
-                                <li className="item">Trải nghiệm chức năng mới cải thiện hiệu quả từ chúng tôi</li>
+                                <li className="item">
+                                    <FormattedMessage id="signup.item1" />
+                                </li>
+                                <li className="item">
+                                    <FormattedMessage id="signup.item2" />
+                                </li>
+                                <li className="item">
+                                    <FormattedMessage id="signup.item3" />
+                                </li>
                             </ul>
                         </div>
                         <div className="main">
-                            <div className="main-title">Đăng ký tài khoản</div>
+                            <div className="main-title">
+                                <FormattedMessage id="signup.title" />
+                            </div>
                             <div className="signup-form">
                                 <div className="account-row">
                                     <div className="field">
@@ -101,7 +110,7 @@ function SignUp() {
                                     </div>
                                     <div className="field">
                                         <label className="field-label">
-                                            Mật khẩu {''}
+                                            <FormattedMessage id="signup.password" /> {''}
                                             <span className="force">*</span>
                                         </label>
                                         <input
@@ -116,7 +125,7 @@ function SignUp() {
                                 <div className="gender">
                                     <div className="field">
                                         <label className="field-label">
-                                            Giới tính {''}
+                                            <FormattedMessage id="signup.gender" /> {''}
                                             <span className="force">*</span>
                                         </label>
                                         <div className="checkbox">
@@ -129,7 +138,9 @@ function SignUp() {
                                                     onClick={check ? (e) => e.stopPropagation() : handleChecked}
                                                     onChange={(event) => handleOnchangeGender(event)}
                                                 />
-                                                <label className="name-gender">Nam</label>
+                                                <label className="name-gender">
+                                                    <FormattedMessage id="signup.male" />
+                                                </label>
                                             </div>
                                             <div className="form-check">
                                                 <input
@@ -140,7 +151,9 @@ function SignUp() {
                                                     onClick={!check ? (e) => e.stopPropagation() : handleChecked}
                                                     onChange={(event) => handleOnchangeGender(event)}
                                                 />
-                                                <label className="name-gender">Nữ</label>
+                                                <label className="name-gender">
+                                                    <FormattedMessage id="signup.female" />
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -148,7 +161,7 @@ function SignUp() {
                                 <div className="info-account">
                                     <div className="field">
                                         <label className="field-label">
-                                            Họ và tên {''}
+                                            <FormattedMessage id="signup.fullname" /> {''}
                                             <span className="force">*</span>
                                         </label>
                                         <input
@@ -161,7 +174,7 @@ function SignUp() {
                                     </div>
                                     <div className="field">
                                         <label className="field-label">
-                                            Điện thoại {''}
+                                            <FormattedMessage id="signup.phone" /> {''}
                                             <span className="force">*</span>
                                         </label>
                                         <input
@@ -178,15 +191,15 @@ function SignUp() {
                                     <div className="license-check">
                                         <input className="license-input" type="checkbox" checked />
                                         <label className="license-label">
-                                            Tôi đã đọc và đồng ý với {''}
+                                            <FormattedMessage id="signup.policy" /> {''}
                                             <a
                                                 className="link-license"
                                                 target="blank"
                                                 href="https://vn.joboko.com/chinh-sach-bao-mat"
                                             >
-                                                Chính sách bảo mật {''}
+                                                <FormattedMessage id="signup.policy-private" />
                                             </a>
-                                            của Han Nom annotation
+                                            <FormattedMessage id="signup.annotation" />
                                         </label>
                                     </div>
                                 </div>
@@ -199,12 +212,16 @@ function SignUp() {
                                         handleSignUp();
                                     }}
                                 >
-                                    <span className="button-title">Đăng ký</span>
+                                    <span className="button-title">
+                                        <FormattedMessage id="homeheader.signup" />
+                                    </span>
                                 </button>
                                 <div className="link-content">
-                                    <div className="exist-account">Đã có tài khoản?</div>
+                                    <div className="exist-account">
+                                        <FormattedMessage id="signup.haveaccount" />
+                                    </div>
                                     <a className="login-link" href="/login">
-                                        Đăng nhập
+                                        <FormattedMessage id="homeheader.login" />
                                     </a>
                                 </div>
                             </div>

@@ -5,21 +5,40 @@ import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../components/redux/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { appLanguage } from '../../../components/redux/appSlice';
+import { useNavigate } from 'react-router-dom';
+
 function Header() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
 
     const [isToggle, setIsToggle] = useState(false);
+    const [selectedLang, setSelectedLang] = useState(true);
 
+    useEffect(() => {
+        setSelectedLang(false);
+        if (localStorage.getItem('lang-now') === 'vi') {
+            setSelectedLang(true);
+        }
+    });
     const handleClickToggle = () => {
+        console.log(document.getElementById('choose-language').value);
         setIsToggle(!isToggle);
     };
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleLogOut = () => {
         dispatch(logout());
     };
+
+    const handleChangeLanguage = (language) => {
+        dispatch(appLanguage(language));
+        navigate(0);
+    };
+
     return (
         <div className="header-container">
             <div className="header-content">
@@ -35,7 +54,9 @@ function Header() {
                             </span>
                         </div>
                         <div className="header-title">
-                            <span className="school">Trường Đại học Công nghệ</span>
+                            <span className="school">
+                                <FormattedMessage id="homeheader.university" />
+                            </span>
                             <span className="tool-name">Han Nom annotation</span>
                         </div>
                     </a>
@@ -43,32 +64,61 @@ function Header() {
                 <div className="header-wrapper">
                     <div className="top-nav">
                         <div className="nav-lang">
-                            <select className="change-lang">
-                                <option selected value="https://vieclam.uet.vnu.edu.vn/dang-nhap">
+                            <select
+                                className="change-lang"
+                                id="choose-language"
+                                onChange={() => {
+                                    handleChangeLanguage(document.getElementById('choose-language').value);
+                                    localStorage.setItem('lang-now', document.getElementById('choose-language').value);
+                                    // navigate(0);
+                                }}
+                            >
+                                <option value="vi" selected={selectedLang}>
                                     Tiếng Việt
                                 </option>
-                                <option value="https://vieclam.uet.vnu.edu.vn/en/dang-nhap">Tiếng Anh</option>
+                                <option value="en" selected={!selectedLang}>
+                                    Tiếng Anh
+                                </option>
                             </select>
-                            <div className="nav-lang-select">
-                                <div className="lang-flag">
-                                    <div className="image-config">
-                                        <img
-                                            className="img"
-                                            src="https://vieclam.uet.vnu.edu.vn/images/common/flag-vi.png"
-                                            alt=""
-                                        />
+                            {localStorage.getItem('lang-now') === 'vi' ? (
+                                <div className="nav-lang-select">
+                                    <div className="lang-flag">
+                                        <div className="image-config">
+                                            <img
+                                                className="img"
+                                                src="https://vieclam.uet.vnu.edu.vn/images/common/flag-vi.png"
+                                                alt=""
+                                            />
+                                        </div>
                                     </div>
+                                    <span className="lang">Tiếng Việt</span>
                                 </div>
-                                <span className="lang">Tiếng Việt</span>
-                            </div>
+                            ) : (
+                                <div className="nav-lang-select">
+                                    <div className="lang-flag">
+                                        <div className="image-config">
+                                            <img
+                                                className="img"
+                                                src="https://vieclam.uet.vnu.edu.vn/images/common/flag-en.png"
+                                                alt=""
+                                            />
+                                        </div>
+                                    </div>
+                                    <span className="lang">English</span>
+                                </div>
+                            )}
                         </div>
                         {!userData ? (
                             <>
                                 <a className="nav-login" href="/login">
-                                    <span className="title-login">Đăng nhập</span>
+                                    <span className="title-login">
+                                        <FormattedMessage id="homeheader.login" />
+                                    </span>
                                 </a>
                                 <a className="nav-signup" href="/sign-up">
-                                    <span className="title-signup">Đăng ký</span>
+                                    <span className="title-signup">
+                                        <FormattedMessage id="homeheader.signup" />
+                                    </span>
                                 </a>
                             </>
                         ) : (
@@ -80,7 +130,10 @@ function Header() {
                                                 <span className="text">U</span>
                                             </div>
                                         </div>
-                                        <span> Xin chào, {userData.fullName} </span>
+                                        <span>
+                                            <FormattedMessage id="homeheader.hello" />
+                                            {userData.fullName}
+                                        </span>
                                     </div>
                                     {isToggle ? (
                                         <div className="dropdown-menu">
@@ -137,27 +190,27 @@ function Header() {
                                     </li>
                                     <li className="nav-item">
                                         <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
-                                            Your models
+                                            <FormattedMessage id="homeheader.yourmodel" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
-                                            Request
+                                            <FormattedMessage id="homeheader.request" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
-                                            Contact
+                                            <FormattedMessage id="homeheader.contact" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
-                                            About us
+                                            <FormattedMessage id="homeheader.aboutus" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
-                                            Documentation
+                                            <FormattedMessage id="homeheader.documentation" />
                                         </a>
                                     </li>
                                 </ul>

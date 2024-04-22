@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { clone, cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import SVGImage from './SVGImage';
 import { useStoreContext } from '../../contexts/StoreContext';
 import { useMouseContext } from '../../contexts/MouseContext';
@@ -44,11 +44,16 @@ function SVGWrapper() {
     const { shapeStyle, selShapeStyle, drawingShapePathStyle, drawingShapePointStyle, labelStyle } = drawStyle;
     const { mouseCoordinate } = mouseState;
 
+    // test import
+
+    //dragging
+    const [isDraw, setIsDraw] = useState(false);
+    const [isDragging, setDragging] = useState(false);
+    const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
+
     //zoom images
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    //dragging
-    const [isDraw, setIsDraw] = useState(false);
     const handleZoomIn = () => {
         setScale((scale) => scale + 0.1);
     };
@@ -56,9 +61,6 @@ function SVGWrapper() {
     const handleZoomOut = () => {
         setScale((scale) => scale - 0.1);
     };
-
-    const [isDragging, setDragging] = useState(false);
-    const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
 
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;

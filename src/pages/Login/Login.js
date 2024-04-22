@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { handleLoginApi } from '../../components/Services/userServices';
 import { loginSuccess } from '../../components/redux/authSlice';
+import { FormattedMessage } from 'react-intl';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -50,28 +51,42 @@ function Login() {
             <div className="login-container">
                 <div className="login-content">
                     <div className="login-inner">
-                        <div className="login-title">THÔNG TIN ĐĂNG NHẬP</div>
+                        <div className="login-title">
+                            <FormattedMessage id="login.title" />
+                        </div>
                         <div className="login-form">
                             <div className="login-field">
                                 <div className="login-row">
-                                    <label className="login-label">Tài khoản / Email: </label>
+                                    <label className="login-label">
+                                        <FormattedMessage id="login.email" />{' '}
+                                    </label>
                                     <span className="musthave">*</span>
-                                    <input
-                                        type="text"
-                                        className="login-input"
-                                        placeholder="Nhập email"
-                                        onChange={(event) => handleOnchangeEmail(event)}
-                                    ></input>
+                                    <FormattedMessage id="login.placeholderemail">
+                                        {(placeholder) => (
+                                            <input
+                                                type="text"
+                                                className="login-input"
+                                                placeholder={placeholder}
+                                                onChange={(event) => handleOnchangeEmail(event)}
+                                            />
+                                        )}
+                                    </FormattedMessage>
                                 </div>
                                 <div className="login-row">
-                                    <label className="login-label">Mật khẩu: </label>
+                                    <label className="login-label">
+                                        <FormattedMessage id="login.password" />
+                                    </label>
                                     <span className="musthave">*</span>
-                                    <input
-                                        type="password"
-                                        className="login-input"
-                                        placeholder="Nhập mật khẩu"
-                                        onChange={(event) => handleOnchangePassword(event)}
-                                    ></input>
+                                    <FormattedMessage id="login.placeholderpassword">
+                                        {(placeholder) => (
+                                            <input
+                                                type="password"
+                                                className="login-input"
+                                                placeholder={placeholder}
+                                                onChange={(event) => handleOnchangePassword(event)}
+                                            />
+                                        )}
+                                    </FormattedMessage>
                                 </div>
                             </div>
                         </div>
@@ -84,22 +99,24 @@ function Login() {
                                     handleLogin();
                                 }}
                             >
-                                <span className="button-text">Đăng nhập</span>
+                                <span className="button-text">
+                                    <FormattedMessage id="homeheader.login" />
+                                </span>
                             </button>
                         </div>
                         <div className="link-login">
                             <p>
-                                Bạn {''}
+                                <FormattedMessage id="login.you" /> {''}
                                 <a href="/login" className="link">
-                                    quên mật khẩu ?
+                                    <FormattedMessage id="login.forgotpassword" />
                                 </a>
                             </p>
                         </div>
                         <div className="link-login">
                             <p>
-                                Bạn chưa có tài khoản? {''}
+                                <FormattedMessage id="login.noaccount" /> {''}
                                 <a href="/sign-up" className="link">
-                                    Đăng ký
+                                    <FormattedMessage id="homeheader.signup" />
                                 </a>
                             </p>
                         </div>

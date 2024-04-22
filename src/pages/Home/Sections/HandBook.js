@@ -3,7 +3,7 @@ import './Section.scss';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
+import { FormattedMessage } from 'react-intl';
 function Handbook() {
     let settings = {
         dots: false,
@@ -32,7 +32,7 @@ function Handbook() {
                                 src="https://oasisoutsourcing.co.ke/wp-content/uploads/2022/06/software-engineer-statistician-visualizer-analyst-working-project-big-data-conference-big-data-presentation-data-science-concept_335657-1850-1.webp"
                                 alt=""
                             />
-                            <div className="slide-title">Data annotation?</div>
+                            <div className="slide-title">Data annotation - Dữ liệu?</div>
                         </a>
                         <a
                             className="img-custom"

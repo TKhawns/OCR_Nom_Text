@@ -1,19 +1,12 @@
 import './Gallery.scss';
-import Slider from 'react-slick';
-
+import { FormattedMessage } from 'react-intl';
 function Gallery() {
-    let settings = {
-        dots: true,
-        //infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        // arrows: false,
-    };
     return (
         <div className="gallery-container">
             <div className="gallery-content">
-                <div className="gallery-header">Sản phẩm</div>
+                <div className="gallery-header">
+                    <FormattedMessage id="gallery.title" />
+                </div>
                 <div className="gallery-grid-tab">
                     <div className="gallery-grid">
                         <div className="gallery-col">
