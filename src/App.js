@@ -5,6 +5,9 @@ import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 import HomePage from './pages/Home/HomePage/HomePage';
 import ImportPage from './pages/Import/Import';
+import Yourmodel from './pages/Yourmodel/Yourmodel';
+import Contact from './pages/Contact/Contact';
+import RequestPage from './pages/Requests/Request';
 
 function App() {
     return (
@@ -16,6 +19,9 @@ function App() {
                     <Route path="/login" Component={Login} />
                     <Route path="/sign-up" Component={SignUp} />
                     <Route path="/import" Component={ImportPage}></Route>
+                    <Route path="/your-model" Component={Yourmodel}></Route>
+                    <Route path="/contact" Component={Contact}></Route>{' '}
+                    <Route path="/request" Component={RequestPage}></Route>
                     {/* Add other routes as needed */}
                 </Routes>
             </div>

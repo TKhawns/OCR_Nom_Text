@@ -189,27 +189,27 @@ function Header() {
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
+                                        <a className="link yourmodel" href="/your-model">
                                             <FormattedMessage id="homeheader.yourmodel" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
+                                        <a className="link" href="/request">
                                             <FormattedMessage id="homeheader.request" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
+                                        <a className="link" href="/contact">
                                             <FormattedMessage id="homeheader.contact" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
+                                        <a className="link" href="/contact">
                                             <FormattedMessage id="homeheader.aboutus" />
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="https://vieclam.uet.vnu.edu.vn/gioi-thieu-nsi3055">
+                                        <a className="link" href="/contact">
                                             <FormattedMessage id="homeheader.documentation" />
                                         </a>
                                     </li>

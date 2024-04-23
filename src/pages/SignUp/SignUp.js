@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../ShareComponent/Footer/Footer';
 import Header from '../ShareComponent/Header/Header';
 import './SignUp.scss';
@@ -50,7 +50,7 @@ function SignUp() {
             }
             if (data && data.StatusCode === 200) {
                 dispatch(loginSuccess(data.Data));
-                navigate('/');
+                navigate(-1);
             }
         } catch (e) {
             console.log(e);
@@ -61,6 +61,9 @@ function SignUp() {
             }
         }
     };
+    useEffect(() => {
+        document.title = 'Đăng ký';
+    });
 
     return (
         <div>

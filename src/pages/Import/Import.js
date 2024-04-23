@@ -7,6 +7,8 @@ import { useRef } from 'react';
 import StepAnnotate from './Sections/StepAnnotate/StepAnnotate';
 import Footer from '../ShareComponent/Footer/Footer';
 import CreateModel from './Sections/CreateModel/CreateModel';
+import { FormattedMessage } from 'react-intl';
+
 function ImportPage() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
@@ -22,43 +24,55 @@ function ImportPage() {
             <Header />
             <div className="import-container">
                 <div className="import-content">
-                    <div className="import-header">Anonymous Project</div>
+                    <div className="import-header">
+                        <FormattedMessage id="project.unlogin" />
+                    </div>
                     <div className="import-box">
                         <div className="model-option">
                             {userData ? (
                                 <div className="title">
-                                    <span>Choose models or</span>
+                                    <span>
+                                        <FormattedMessage id="import.choose1" />
+                                    </span>
                                     <div onClick={handleClick} className="create">
-                                        Create your own model
+                                        <FormattedMessage id="import.choose2" />
                                     </div>
                                 </div>
                             ) : (
                                 <div className="title">
                                     <a href="/login" className="create">
-                                        Login
+                                        <FormattedMessage id="homeheader.login" />
                                     </a>
-                                    <div>to discover more model</div>
+                                    <div>
+                                        <FormattedMessage id="import.discover" />
+                                    </div>
                                 </div>
                             )}
                             {userData ? (
                                 <select className="toggle">
                                     <option>Default</option>
-                                    <option>a</option>
-                                    <option>a</option>
+                                    <option>My's model</option>
+                                    <option>Nam's model</option>
                                 </select>
                             ) : (
                                 <div className="no-choose">Default</div>
                             )}
                         </div>
                         <a href="/annotation-tool" className="upload-box">
-                            <div className="upload-title">+ Upload your data/images</div>
+                            <div className="upload-title">
+                                <FormattedMessage id="import.upload" />
+                            </div>
                         </a>
                     </div>
                     <div className="history">
                         <div className="history-header">
-                            <div className="title">History</div>
+                            <div className="title">
+                                <FormattedMessage id="import.history" />
+                            </div>
                             <a className="see-all">
-                                <span>See all </span>
+                                <span>
+                                    <FormattedMessage id="import.seeall" />{' '}
+                                </span>
                                 <FontAwesomeIcon icon={faAnglesRight} />
                             </a>
                         </div>

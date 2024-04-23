@@ -1,7 +1,7 @@
 import './Login.scss';
 import Header from '../ShareComponent/Header/Header';
 import Footer from '../ShareComponent/Footer/Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { handleLoginApi } from '../../components/Services/userServices';
@@ -44,6 +44,9 @@ function Login() {
             }
         }
     };
+    useEffect(() => {
+        document.title = 'Đăng nhập';
+    });
 
     return (
         <div>

@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import Footer from '../ShareComponent/Footer/Footer';
 import Header from '../ShareComponent/Header/Header';
-import './Yourmodel.scss';
-import data from './MockData.json';
-import Pagination from './Pagtination';
+import Pagination from '../Yourmodel/Pagtination';
+import './Request.scss';
+import data from '../Yourmodel/MockData.json';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleDown } from '@fortawesome/free-solid-svg-icons';
 
 let PageSize = 20;
-function Yourmodel() {
+function RequestPage() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const currentTableData = useMemo(() => {
@@ -16,21 +18,20 @@ function Yourmodel() {
     }, [currentPage]);
 
     useEffect(() => {
-        document.title = 'Mô hình của bạn';
+        document.title = 'Danh sách yêu cầu';
     });
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
-
     return (
         <div>
             <Header />
 
-            <div className="yourmodel-container">
-                <div className="yourmodel-content">
-                    <div className="yourmodel-title">Danh sách mô hình</div>
+            <div className="request-container">
+                <div className="request-content">
+                    <div className="request-title">Danh sách yêu cầu</div>
                     {userData ? (
-                        <div className="yourmodel-table">
+                        <div className="request-table">
                             <div className="section">
                                 <div className="filter">
                                     <div className="filter-form">
@@ -59,10 +60,11 @@ function Yourmodel() {
                                         <div className="table-header">
                                             <div className="row">
                                                 <div className="row-data">#</div>
-                                                <div className="row-data1">Ngày tạo</div>
+                                                <div className="row-data1">Họ tên</div>
                                                 <div className="row-data1">Tên mô hình</div>
                                                 <div className="row-data1">Trạng thái</div>
-                                                <div className="row-data1">Thông tin</div>
+                                                <div className="row-data1">Tải về</div>
+                                                <div className="row-data1">Duyệt</div>
                                             </div>
                                         </div>
                                         <div className="table-body">
@@ -83,10 +85,20 @@ function Yourmodel() {
                                                         <div className="body-row-data1">
                                                             <span>{item.status}</span>
                                                         </div>
+                                                        <div className="body-row-data1">
+                                                            <span>
+                                                                <FontAwesomeIcon
+                                                                    className="download"
+                                                                    icon={faCircleDown}
+                                                                />
+                                                            </span>
+                                                        </div>
                                                         <div className="body-button">
-                                                            <a className="infor-link" href="" role="button">
-                                                                {item.link}
-                                                            </a>
+                                                            <select className="infor-link">
+                                                                <option selected>Chọn</option>
+                                                                <option>Chấp nhận</option>
+                                                                <option>Từ chối</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 );
@@ -106,9 +118,7 @@ function Yourmodel() {
                             </div>
                         </div>
                     ) : (
-                        <div className="notuser">
-                            Bạn chưa có mô hình nào. Hãy đăng nhập để sở hữu và đào tạo mô hình của bạn !
-                        </div>
+                        <div className="notuser">Chỉ Quản trị viên mới có thể phê duyệt yêu cầu!</div>
                     )}
                 </div>
             </div>
@@ -117,4 +127,4 @@ function Yourmodel() {
     );
 }
 
-export default Yourmodel;
+export default RequestPage;
