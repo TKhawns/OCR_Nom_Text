@@ -15,6 +15,7 @@ import TopBar from './TopBar/TopBar';
 import './index.scss';
 import actionTypes from '../contexts/StoreContext/actionTypes';
 import { useStoreContext } from '../contexts/StoreContext';
+import ToolHeader from './ToolHeader/ToolHeader';
 
 function LabelImg(props) {
     const { labelTypes, closePointRegion } = props;
@@ -66,6 +67,7 @@ function LabelImg(props) {
         <StoreContextProvider initialState={initialStoreState}>
             <MouseContextProvider initialState={initialMouseState}>
                 <Row type="flex" justify="center" style={{ height: '100%' }}>
+                    <ToolHeader />
                     <TopBar />
                     <Col xs={24} style={{ height: '100%' }}>
                         <Row type="flex" justify="center" style={{ height: '100%' }}>

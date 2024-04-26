@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { handleSignUpApi } from '../../components/Services/userServices';
 import { loginSuccess } from '../../components/redux/authSlice';
 import { FormattedMessage } from 'react-intl';
+import Loading from '../ShareComponent/Loading/Loading';
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ function SignUp() {
     const [phone, setPhone] = useState('');
     const [errMessage, setErrMessage] = useState([]);
     const [check, setCheck] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleChecked = () => {
         setCheck(!check);
@@ -42,16 +44,19 @@ function SignUp() {
 
     const handleSignUp = async () => {
         setErrMessage('');
+        setLoading(true);
         try {
             let data = await handleSignUpApi(email, password, gender, name, phone);
-            console.log(data);
-            if (data && data.StatusCode !== 200) {
-                setErrMessage(data);
-            }
-            if (data && data.StatusCode === 200) {
-                dispatch(loginSuccess(data.Data));
-                navigate(-1);
-            }
+            setTimeout(() => {
+                setLoading(false);
+                if (data && data.StatusCode !== 200) {
+                    setErrMessage(data);
+                }
+                if (data && data.StatusCode === 200) {
+                    dispatch(loginSuccess(data.Data));
+                    navigate(-1);
+                }
+            }, 2000);
         } catch (e) {
             console.log(e);
             if (e.response) {
@@ -233,6 +238,11 @@ function SignUp() {
                 </div>
             </div>
             <Footer />
+            {loading && (
+                <div className="loading-animation">
+                    <Loading />
+                </div>
+            )}
         </div>
     );
 }

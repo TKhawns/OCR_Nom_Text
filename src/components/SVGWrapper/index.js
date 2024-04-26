@@ -14,11 +14,13 @@ import {
     drawStyleFactory,
     shapeFactory,
     imageSizeFactory,
+    shapeFactoryTest,
 } from '../../utils';
 import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
 import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { handleLabel } from '../LabelBox';
 
 let pointsX = [];
 let pointsY = [];
@@ -80,6 +82,7 @@ function SVGWrapper() {
         } catch (error) {
             console.error(error);
         }
+        //if (points) handleClickPath();
     }, [imageFiles, selDrawImageIndex]);
 
     const isValidCoordinate = ({ x, y }) =>
@@ -324,23 +327,45 @@ function SVGWrapper() {
         });
     };
 
-    return (
-        <div className="svg-wrapper">
-            <div style={{ display: 'flex', flexDirection: 'column', width: '40px' }}>
-                <button
-                    onClick={handleZoomIn}
-                    style={{ position: 'relative', zIndex: '100', fontSize: '20px', border: ' 1px solid grey' }}
-                >
-                    <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
-                </button>
-                <button
-                    onClick={handleZoomOut}
-                    style={{ position: 'relative', zIndex: '100', fontSize: '20px', border: ' 1px solid grey' }}
-                >
-                    <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
-                </button>
-            </div>
+    // test
+    let points = [
+        { x: 100, y: 50 },
+        { x: 200, y: 100 },
+        { x: 150, y: 200 },
+        { x: 50, y: 150 },
+        { x: 100, y: 50 },
+    ];
+    // const createPathFromPoints = (points) => {
+    //     let path = '';
+    //     points.forEach((point, index) => {
+    //         const command = index === 0 ? 'M' : 'L';
+    //         path += `${command} ${point.x} ${point.y} `;
+    //     });
+    //     // Đóng path
+    //     path += 'Z';
 
+    //     return path;
+    // };
+
+    const handleClickPath = () => {
+        const newShape = shapeFactoryTest(points);
+        dispatch({
+            type: actionTypes.SET_CURRENT_SHAPE,
+            payload: { currentShape: newShape },
+        });
+        points = [];
+        dispatch({
+            type: actionTypes.SET_LABELBOX_STATUS,
+            payload: {
+                selLabelType,
+                labelBoxVisible: true,
+                labelBoxStatus: labelStatusTypes.CREATE,
+            },
+        });
+    };
+
+    return (
+        <div className="svg-wrapper" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {imageFiles[selDrawImageIndex] && (
                 <svg
                     className="svg-container"
@@ -353,6 +378,14 @@ function SVGWrapper() {
                     transform={`scale(${scale}) translate(${position.x} ${position.y})`}
                 >
                     <SVGImage {...imageProps} />
+
+                    {/* <path
+                        d={createPathFromPoints(points)}
+                        fill="none" // Không tô màu bên trong hình chữ nhật
+                        stroke="red" // Màu sắc đường viền của hình chữ nhật
+                        strokeWidth={2} // Độ rộng của đường viền
+                        onClick={handleClickPath}
+                    /> */}
 
                     {currentShape && (
                         <g>
@@ -392,6 +425,41 @@ function SVGWrapper() {
                         )}
                 </svg>
             )}
+            <div
+                style={{
+                    display: 'flex',
+                    right: '0',
+                    flexDirection: 'column',
+                    width: '40px',
+                    marginRight: '3px',
+                }}
+            >
+                <button
+                    onClick={handleZoomIn}
+                    style={{
+                        position: 'relative',
+                        zIndex: '100',
+                        fontSize: '20px',
+                        border: ' 1px solid grey',
+                        marginBottom: '5px',
+                        borderRadius: '20%',
+                    }}
+                >
+                    <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
+                </button>
+                <button
+                    onClick={handleZoomOut}
+                    style={{
+                        position: 'relative',
+                        zIndex: '100',
+                        fontSize: '20px',
+                        border: ' 1px solid grey',
+                        borderRadius: '20%',
+                    }}
+                >
+                    <FontAwesomeIcon icon={faMagnifyingGlassMinus} />
+                </button>
+            </div>
         </div>
     );
 }

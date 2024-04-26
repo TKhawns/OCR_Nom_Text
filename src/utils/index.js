@@ -117,6 +117,28 @@ export const shapeFactory = (coordinate) => {
         d,
     };
 };
+const createPathFromPoints = (points) => {
+    let path = '';
+    points.forEach((point, index) => {
+        const command = index === 0 ? 'M' : 'L';
+        path += `${command} ${point.x} ${point.y} `;
+    });
+    // Đóng path
+    path += 'Z';
+
+    return path;
+};
+export const shapeFactoryTest = (paths) => {
+    const d = createPathFromPoints(paths);
+    return {
+        label: 'abc',
+        visible: true,
+        isSelect: false,
+        exactPathCount: 1,
+        paths,
+        d,
+    };
+};
 
 export const imageSizeFactory = ({ width = 0, height = 0, depth = 3 }) => ({
     width,

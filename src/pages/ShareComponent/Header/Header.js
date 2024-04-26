@@ -46,11 +46,7 @@ function Header() {
                     <a className="logo-link" href="https://uet.vnu.edu.vn/">
                         <div className="logo-image">
                             <span className="figure-image">
-                                <img
-                                    className="image-uet"
-                                    src="https://i-vn2.joboko.com/okoimg/vieclam.uet.vnu.edu.vn/xurl/images/logo.png"
-                                    alt=""
-                                />
+                                <img className="image-uet" src="logo.png" alt="" />
                             </span>
                         </div>
                         <div className="header-title">

@@ -63,6 +63,9 @@
                     -moz-appearance: none;
                     text-indent: 1px;
                     text-overflow: '';
+                    &:focus {
+                        outline: none;
+                    }
                 }
                 .no-choose {
                     min-width: 172px;

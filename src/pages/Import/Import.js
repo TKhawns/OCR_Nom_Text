@@ -25,7 +25,7 @@ function ImportPage() {
             <div className="import-container">
                 <div className="import-content">
                     <div className="import-header">
-                        <FormattedMessage id="project.unlogin" />
+                        {userData ? <FormattedMessage id="project.login" /> : <FormattedMessage id="project.unlogin" />}
                     </div>
                     <div className="import-box">
                         <div className="model-option">
