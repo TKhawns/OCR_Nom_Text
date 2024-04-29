@@ -84,6 +84,12 @@ const Reducer = (state, action) => {
                 currentShape: null,
                 shapes: payload.shapes,
             };
+        case actionTypes.SET_SHAPES_IMPORT:
+            return {
+                ...state,
+                currentShape: null,
+                shapes: payload.shapes,
+            };
         case actionTypes.SET_SEL_SHAPE_INDEX:
             return {
                 ...state,
@@ -96,6 +102,12 @@ const Reducer = (state, action) => {
                         return newSubItem;
                     });
                 }),
+                selShapeIndex: payload.selShapeIndex,
+            };
+        case actionTypes.SET_SEL_SHAPE_INDEX_IMPORT:
+            return {
+                ...state,
+                drawStatus: payload.selShapeIndex === null ? drawStatusTypes.IDLE : drawStatusTypes.SELECT,
                 selShapeIndex: payload.selShapeIndex,
             };
         case actionTypes.SET_LABEL_TYPES:

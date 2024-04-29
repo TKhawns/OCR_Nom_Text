@@ -9,6 +9,7 @@ function LabelList() {
     return (
         <Row type="flex" justify="start" style={{ overflow: 'auto' }}>
             {shapes[selDrawImageIndex] &&
+                Array.isArray(shapes[selDrawImageIndex]) &&
                 shapes[selDrawImageIndex].map((item, index) => (
                     <Col key={item.d} xs={24}>
                         <LabelItem index={index} label={item.label} visible={item.visible} />

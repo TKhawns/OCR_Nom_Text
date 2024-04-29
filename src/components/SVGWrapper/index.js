@@ -15,12 +15,12 @@ import {
     shapeFactory,
     imageSizeFactory,
     shapeFactoryTest,
+    createPathFromPoints,
 } from '../../utils';
 import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
 import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { handleLabel } from '../LabelBox';
 
 let pointsX = [];
 let pointsY = [];
@@ -46,8 +46,6 @@ function SVGWrapper() {
     const { shapeStyle, selShapeStyle, drawingShapePathStyle, drawingShapePointStyle, labelStyle } = drawStyle;
     const { mouseCoordinate } = mouseState;
 
-    // test import
-
     //dragging
     const [isDraw, setIsDraw] = useState(false);
     const [isDragging, setDragging] = useState(false);
@@ -64,12 +62,40 @@ function SVGWrapper() {
         setScale((scale) => scale - 0.1);
     };
 
+    const [isInsert, setInsert] = useState(true);
+    let points1 = [
+        { x: 100, y: 50 },
+        { x: 200, y: 100 },
+        { x: 150, y: 200 },
+        { x: 50, y: 150 },
+        { x: 100, y: 50 },
+    ];
+    let points2 = [
+        { x: 10, y: 50 },
+        { x: 20, y: 100 },
+        { x: 50, y: 200 },
+        { x: 150, y: 150 },
+        { x: 10, y: 50 },
+    ];
+    let points3 = [
+        { x: 100, y: 10 },
+        { x: 20, y: 100 },
+        { x: 50, y: 200 },
+        { x: 150, y: 150 },
+        { x: 100, y: 10 },
+    ];
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
         const objURL = window.URL.createObjectURL(imageFiles[selDrawImageIndex]);
         try {
             const size = await getImageSize(objURL);
             const { width, height } = size;
+            if (selDrawImageIndex === 0 && isInsert) {
+                handleClickPath();
+                setInsert(false);
+            }
+
+            console.log(selDrawImageIndex);
             dispatch({
                 type: actionTypes.SET_IMAGE_SIZES,
                 payload: {
@@ -82,7 +108,6 @@ function SVGWrapper() {
         } catch (error) {
             console.error(error);
         }
-        //if (points) handleClickPath();
     }, [imageFiles, selDrawImageIndex]);
 
     const isValidCoordinate = ({ x, y }) =>
@@ -327,14 +352,6 @@ function SVGWrapper() {
         });
     };
 
-    // test
-    let points = [
-        { x: 100, y: 50 },
-        { x: 200, y: 100 },
-        { x: 150, y: 200 },
-        { x: 50, y: 150 },
-        { x: 100, y: 50 },
-    ];
     // const createPathFromPoints = (points) => {
     //     let path = '';
     //     points.forEach((point, index) => {
@@ -348,20 +365,43 @@ function SVGWrapper() {
     // };
 
     const handleClickPath = () => {
-        const newShape = shapeFactoryTest(points);
+        // cái này là danh sách tất cả các shapes đang có, phải kiểu dữ liệu mảng
+        //const newShape = [shapeFactoryTest(points1), shapeFactoryTest(points2), shapeFactoryTest(points3)];
+        const newShape = shapeFactoryTest(points1);
         dispatch({
             type: actionTypes.SET_CURRENT_SHAPE,
             payload: { currentShape: newShape },
         });
-        points = [];
-        dispatch({
-            type: actionTypes.SET_LABELBOX_STATUS,
-            payload: {
-                selLabelType,
-                labelBoxVisible: true,
-                labelBoxStatus: labelStatusTypes.CREATE,
-            },
-        });
+        //copy array of newShape
+        const shapesCopy = cloneDeep(shapes);
+
+        // cái này là 1 shapes hiện tại, kiểu dữ liệu là shape
+        // newShape.forEach((item, index) => {
+        //     const currentShapeCopy = cloneDeep(item);
+        //     currentShapeCopy.paths.pop();
+        //     currentShapeCopy.d = createPathFromPoints(currentShapeCopy.paths);
+        //     // gán label
+        //     currentShapeCopy.label = 'accd';
+        //     // cập nhật danh sách shapeCopy, ở đây nó rỗng nên chỉ thêm được 1, sau này fix bug
+        //     if (index === 0) shapesCopy[selDrawImageIndex] = [currentShapeCopy];
+        //     else {
+        //         shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
+        //     }
+
+        //     dispatch({ type: actionTypes.SET_SHAPES_IMPORT, payload: { shapes: shapesCopy } });
+
+        //     dispatch({ type: actionTypes.SET_SEL_SHAPE_INDEX_IMPORT, payload: { selShapeIndex: null } });
+        // });
+
+        const currentShapeCopy = cloneDeep(newShape);
+        currentShapeCopy.paths.pop();
+        currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, true);
+        currentShapeCopy.label = 'abc';
+        shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
+        dispatch({ type: actionTypes.SET_SHAPES, payload: { shapes: shapesCopy } });
+        points1 = [];
+        points2 = [];
+        points3 = [];
     };
 
     return (
@@ -379,14 +419,6 @@ function SVGWrapper() {
                 >
                     <SVGImage {...imageProps} />
 
-                    {/* <path
-                        d={createPathFromPoints(points)}
-                        fill="none" // Không tô màu bên trong hình chữ nhật
-                        stroke="red" // Màu sắc đường viền của hình chữ nhật
-                        strokeWidth={2} // Độ rộng của đường viền
-                        onClick={handleClickPath}
-                    /> */}
-
                     {currentShape && (
                         <g>
                             <path d={currentShape.d} style={{ ...drawingShapePathStyle }} />
@@ -403,6 +435,7 @@ function SVGWrapper() {
                     )}
 
                     {shapes[selDrawImageIndex] &&
+                        Array.isArray(shapes[selDrawImageIndex]) &&
                         shapes[selDrawImageIndex].map((shape, index) =>
                             !shape.visible ? null : (
                                 <g key={shape.d}>

@@ -117,7 +117,7 @@ export const shapeFactory = (coordinate) => {
         d,
     };
 };
-const createPathFromPoints = (points) => {
+export const createPathFromPoints = (points) => {
     let path = '';
     points.forEach((point, index) => {
         const command = index === 0 ? 'M' : 'L';
@@ -129,9 +129,9 @@ const createPathFromPoints = (points) => {
     return path;
 };
 export const shapeFactoryTest = (paths) => {
-    const d = createPathFromPoints(paths);
+    const d = getSVGPathD(paths, true);
     return {
-        label: 'abc',
+        label: '',
         visible: true,
         isSelect: false,
         exactPathCount: 1,

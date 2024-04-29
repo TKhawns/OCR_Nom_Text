@@ -43,11 +43,14 @@ function Login() {
             }, 2000);
         } catch (e) {
             console.log(e);
-            if (e.response) {
-                if (e.response.data) {
-                    setErrMessage(e.response.data.Message);
+            setTimeout(() => {
+                setLoading(false);
+                if (e.response) {
+                    if (e.response.data) {
+                        setErrMessage(e.response.data.Message);
+                    }
                 }
-            }
+            }, 2000);
         }
     };
     useEffect(() => {

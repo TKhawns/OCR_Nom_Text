@@ -53,7 +53,7 @@ function Header() {
                             <span className="school">
                                 <FormattedMessage id="homeheader.university" />
                             </span>
-                            <span className="tool-name">Han Nom annotation</span>
+                            <span className="tool-name">Sino - Nom</span>
                         </div>
                     </a>
                 </div>
