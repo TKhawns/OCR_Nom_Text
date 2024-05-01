@@ -64,7 +64,7 @@ function ImportPage() {
                             </div>
                         </a>
                     </div>
-                    <div className="history">
+                    {/* <div className="history">
                         <div className="history-header">
                             <div className="title">
                                 <FormattedMessage id="import.history" />
@@ -72,11 +72,7 @@ function ImportPage() {
                             <a className="see-all">
                                 <span>
                                     <FormattedMessage id="import.seeall" />{' '}
-                                </span>
-                                <FontAwesomeIcon icon={faAnglesRight} />
-                            </a>
-                        </div>
-                        <div className="history-list">
+                      <div className="history-list">
                             <div className="history-item">
                                 <div className="image">
                                     <img
@@ -111,8 +107,11 @@ function ImportPage() {
                                     </div>
                                 </div>
                             </div>
+                        </div>            </span>
+                                <FontAwesomeIcon icon={faAnglesRight} />
+                            </a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {userData ? (

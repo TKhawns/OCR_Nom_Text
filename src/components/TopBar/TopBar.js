@@ -2,13 +2,14 @@ import './TopBar.scss';
 import { message } from 'antd';
 import { useStoreContext } from '../../contexts/StoreContext';
 import actionTypes from '../../contexts/StoreContext/actionTypes';
-import { imageTypes } from '../../constants';
+import { annotationTypes, imageTypes } from '../../constants';
 import { getURLExtension, imageSizeFactory, generateCoco, exportZip, generateYolo } from '../../utils';
 import { Menu, Dropdown, Button } from 'antd';
 
 function TopBar() {
     const { state, dispatch } = useStoreContext();
-    const { imageFiles, selDrawImageIndex, imageSizes, drawStatus, shapes, selShapeIndex } = state;
+    const { imageFiles, selDrawImageIndex, imageSizes, txtFiles, selDrawTxtIndex, drawStatus, shapes, selShapeIndex } =
+        state;
 
     const onFilesChange = (event) => {
         // only allow image file
@@ -32,6 +33,14 @@ function TopBar() {
                 selShapeIndex,
             },
         });
+        const msg = files.length > 1 ? `${files.length} images` : `${files.length} image`;
+        message.success(`Success to load ${msg}.`);
+    };
+    const onFilesTxtChange = (event) => {
+        const files = [...event.target.files].filter(
+            (file) => annotationTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
+        );
+        console.log(files.length);
         const msg = files.length > 1 ? `${files.length} images` : `${files.length} image`;
         message.success(`Success to load ${msg}.`);
     };
@@ -127,6 +136,25 @@ function TopBar() {
                             </svg>
                         </span>
                         <span className="tag-name">Open</span>
+                    </label>
+                    <label type="button" className="import-button" style={{ width: '50px' }}>
+                        <input
+                            type="file"
+                            accept={annotationTypes.map((type) => `.${type}`).join(',')}
+                            multiple
+                            onChange={onFilesTxtChange}
+                            style={{ display: 'none', zIndex: '100' }}
+                        />
+                        <span className="save-icon">
+                            <svg viewBox="0 0 24 24" width="1em" height="1em" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.5 2H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6l-4-4zM15 17H9a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1zm0-5H9v-2h6v2z"
+                                    stroke="currentColor"
+                                    fill="none"
+                                />
+                            </svg>
+                        </span>
+                        <span className="tag-name">Open txt</span>
                     </label>
                     <button type="button" className="save-button" onClick={onSaveClick}>
                         <span className="save-icon">

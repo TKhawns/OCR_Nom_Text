@@ -27,6 +27,9 @@ StoreContextProvider.propTypes = {
         selDrawImageIndex: PropTypes.number,
         selImageIndexes: PropTypes.arrayOf(PropTypes.number),
         imageSize: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.shape(imageSizePropTypes))),
+        txtFiles: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+        selDrawTxtIndex: PropTypes.number,
+        selTxtIndexes: PropTypes.arrayOf(PropTypes.number),
         drawStyle: PropTypes.shape(drawStylePropTypes),
         drawSatus: PropTypes.string,
         selShapeType: PropTypes.string,
@@ -43,6 +46,7 @@ StoreContextProvider.propTypes = {
         closePointRegion: PropTypes.number,
         dragStatus: PropTypes.string,
         fullScreen: PropTypes.string,
+        isShowUpload: PropTypes.bool,
     }).isRequired,
 };
 

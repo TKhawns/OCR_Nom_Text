@@ -151,18 +151,30 @@
                                 }
                                 .body-button {
                                     flex-grow: 1;
-                                    .infor-link {
-                                        padding: 0.4em 1.2em;
-                                        font-size: 0.875em;
-                                        border-radius: 0.25em;
+                                    display: flex;
+                                    justify-content: space-evenly;
+                                    .ok-button {
+                                        background-color: transparent;
                                         color: #198754;
                                         border: 1px solid #198754;
+                                        border-radius: 0.25em;
+                                        padding: 0.3em 1.2em;
+                                        font-size: 0.875em;
                                         &:hover {
                                             background-color: #198754;
                                             color: #fff;
                                         }
-                                        &:focus {
-                                            outline: none;
+                                    }
+                                    .reject-button {
+                                        background-color: transparent;
+                                        color: red;
+                                        border: 1px solid red;
+                                        border-radius: 0.25em;
+                                        padding: 0.3em 1.2em;
+                                        font-size: 0.875em;
+                                        &:hover {
+                                            background-color: red;
+                                            color: #fff;
                                         }
                                     }
                                 }

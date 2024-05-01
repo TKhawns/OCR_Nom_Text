@@ -37,6 +37,30 @@ const Reducer = (state, action) => {
                 ...state,
                 selImageIndexes: payload.selImageIndexes,
             };
+        case actionTypes.SET_TXT_FILES:
+            return {
+                ...state,
+                txtFiles: payload.txtFiles,
+                selDrawTxtIndex: payload.selDrawTxtIndex,
+                selTxtIndexes: [],
+                drawStatus: payload.drawStatus,
+                currentShape: null,
+                shapes: payload.shapes,
+                selShapeIndex: payload.selShapeIndex,
+            };
+        case actionTypes.SET_SEL_DRAW_TXT_INDEX:
+            return {
+                ...state,
+                selDrawTxtIndex: payload.selDrawTxtIndex,
+                drawStatus: drawStatusTypes.IDLE,
+                currentShape: null,
+                selShapeIndex: null,
+            };
+        case actionTypes.SET_SEL_TXT_INDEXES:
+            return {
+                ...state,
+                selTxtIndexes: payload.selTxtndexes,
+            };
         case actionTypes.SET_DRAW_STATUS:
             return {
                 ...state,
@@ -153,6 +177,11 @@ const Reducer = (state, action) => {
             return {
                 ...state,
                 fullScreen: actionTypes.FULL_SCREEN,
+            };
+        case actionTypes.SHOW_UPLOAD_MODAL:
+            return {
+                ...state,
+                isShowUpload: payload.isShowUpload,
             };
         default:
             return state;

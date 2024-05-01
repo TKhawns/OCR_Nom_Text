@@ -94,11 +94,8 @@ function RequestPage() {
                                                             </span>
                                                         </div>
                                                         <div className="body-button">
-                                                            <select className="infor-link">
-                                                                <option selected>Chọn</option>
-                                                                <option>Chấp nhận</option>
-                                                                <option>Từ chối</option>
-                                                            </select>
+                                                            <button className="ok-button">Đồng ý</button>
+                                                            <button className="reject-button">Từ chối</button>
                                                         </div>
                                                     </div>
                                                 );
