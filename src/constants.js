@@ -26,4 +26,6 @@ export const CocoFolderName = 'coco_format';
 
 export const imageTypes = ['jpg', 'jpeg', 'png'];
 
+export const importType = ['zip'];
+
 export const annotationTypes = ['txt'];

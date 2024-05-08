@@ -64,25 +64,25 @@ function SVGWrapper() {
 
     const [isInsert, setInsert] = useState(true);
     let points1 = [
-        { x: 100, y: 50 },
-        { x: 200, y: 100 },
-        { x: 150, y: 200 },
-        { x: 50, y: 150 },
-        { x: 100, y: 50 },
+        { x: 40, y: 271 },
+        { x: 40, y: 325 },
+        { x: 95, y: 325 },
+        { x: 95, y: 271 },
+        { x: 40, y: 271 },
     ];
     let points2 = [
-        { x: 10, y: 50 },
-        { x: 20, y: 100 },
-        { x: 50, y: 200 },
-        { x: 150, y: 150 },
-        { x: 10, y: 50 },
+        { x: 57, y: 28 },
+        { x: 57, y: 84 },
+        { x: 106, y: 84 },
+        { x: 106, y: 28 },
+        { x: 57, y: 28 },
     ];
     let points3 = [
-        { x: 100, y: 10 },
-        { x: 20, y: 100 },
-        { x: 50, y: 200 },
-        { x: 150, y: 150 },
-        { x: 100, y: 10 },
+        { x: 44, y: 112 },
+        { x: 44, y: 160 },
+        { x: 95, y: 160 },
+        { x: 95, y: 112 },
+        { x: 44, y: 112 },
     ];
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
@@ -174,6 +174,7 @@ function SVGWrapper() {
         const point4 = { x: point3.x, y: point1.y };
 
         currentShapeCopy.paths = [point1, point2, point3, point4, point1];
+        console.log(currentShapeCopy.paths);
         currentShapeCopy.exactPathCount = currentShapeCopy.paths.length - 1;
         currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, false);
         dispatch({
@@ -364,40 +365,27 @@ function SVGWrapper() {
     //     return path;
     // };
 
-    const handleClickPath = () => {
+    const handleClickPath = async () => {
         // cái này là danh sách tất cả các shapes đang có, phải kiểu dữ liệu mảng
-        //const newShape = [shapeFactoryTest(points1), shapeFactoryTest(points2), shapeFactoryTest(points3)];
-        const newShape = shapeFactoryTest(points1);
-        dispatch({
-            type: actionTypes.SET_CURRENT_SHAPE,
-            payload: { currentShape: newShape },
-        });
-        //copy array of newShape
+        const listShape = [shapeFactoryTest(points1), shapeFactoryTest(points2), shapeFactoryTest(points3)];
+        for (var i = 0; i < listShape.length; i++) {
+            const newShape = listShape[i];
+            dispatch({
+                type: actionTypes.SET_CURRENT_SHAPE,
+                payload: { currentShape: newShape },
+            });
+        }
+
         const shapesCopy = cloneDeep(shapes);
 
-        // cái này là 1 shapes hiện tại, kiểu dữ liệu là shape
-        // newShape.forEach((item, index) => {
-        //     const currentShapeCopy = cloneDeep(item);
-        //     currentShapeCopy.paths.pop();
-        //     currentShapeCopy.d = createPathFromPoints(currentShapeCopy.paths);
-        //     // gán label
-        //     currentShapeCopy.label = 'accd';
-        //     // cập nhật danh sách shapeCopy, ở đây nó rỗng nên chỉ thêm được 1, sau này fix bug
-        //     if (index === 0) shapesCopy[selDrawImageIndex] = [currentShapeCopy];
-        //     else {
-        //         shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
-        //     }
+        for (var i = 0; i < listShape.length; i++) {
+            let currentShapeCopy = cloneDeep(listShape[i]);
+            currentShapeCopy.paths.pop();
+            currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, true);
+            currentShapeCopy.label = 'abc';
+            shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
+        }
 
-        //     dispatch({ type: actionTypes.SET_SHAPES_IMPORT, payload: { shapes: shapesCopy } });
-
-        //     dispatch({ type: actionTypes.SET_SEL_SHAPE_INDEX_IMPORT, payload: { selShapeIndex: null } });
-        // });
-
-        const currentShapeCopy = cloneDeep(newShape);
-        currentShapeCopy.paths.pop();
-        currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, true);
-        currentShapeCopy.label = 'abc';
-        shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
         dispatch({ type: actionTypes.SET_SHAPES, payload: { shapes: shapesCopy } });
         points1 = [];
         points2 = [];

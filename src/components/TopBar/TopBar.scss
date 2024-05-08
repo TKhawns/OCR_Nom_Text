@@ -66,15 +66,18 @@
                 background-color: azure;
             }
             .center-button {
-                height: 40px;
+                height: 30px;
+                width: 80px;
                 border-radius: 5px;
                 border: 1px solid gray;
                 justify-content: center;
                 align-items: center;
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 margin: 0 15px;
-                font-size: 12px;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 20px;
             }
         }
         .content-right {

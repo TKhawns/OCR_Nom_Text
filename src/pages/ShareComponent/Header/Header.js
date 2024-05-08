@@ -43,7 +43,7 @@ function Header() {
         <div className="header-container">
             <div className="header-content">
                 <div className="header-logo">
-                    <a className="logo-link" href="https://uet.vnu.edu.vn/">
+                    <a className="logo-link" href="/">
                         <div className="logo-image">
                             <span className="figure-image">
                                 <img className="image-uet" src="logo.png" alt="" />

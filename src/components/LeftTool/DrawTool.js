@@ -63,6 +63,7 @@ function DrawTool() {
     // drag button
     const onDragClick = () => {
         setIsDrag(!isDrag);
+
         if (!isDrag) {
             dispatch({ type: actionTypes.NOT_DRAG_IMAGE });
         } else {

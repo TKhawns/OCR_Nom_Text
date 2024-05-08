@@ -2,25 +2,46 @@ import { useEffect, useMemo, useState } from 'react';
 import Footer from '../ShareComponent/Footer/Footer';
 import Header from '../ShareComponent/Header/Header';
 import './Yourmodel.scss';
-import data from './MockData.json';
 import Pagination from './Pagtination';
+import { getAllModelById } from '../../components/Services/userServices';
+import Loading from '../ShareComponent/Loading/Loading';
+import { useDispatch } from 'react-redux';
+import { isOpenDescript } from '../../components/redux/eventSlice';
+import DescriptionModal from './descriptionModal';
 
-let PageSize = 20;
+let PageSize = 10;
+
 function Yourmodel() {
     const [currentPage, setCurrentPage] = useState(1);
-
-    const currentTableData = useMemo(() => {
-        const firstPageIndex = (currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
-        return data.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
-
-    useEffect(() => {
-        document.title = 'Mô hình của bạn';
-    });
+    const [list, setList] = useState({ Data: [] });
+    const [isLoad, setIsLoad] = useState(false);
+    const [description, setDescription] = useState('');
+    const dispatch = useDispatch();
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
+    let userId = userData.userId;
+
+    const handleShowDescription = (event) => {
+        setDescription(event);
+        dispatch(isOpenDescript(true));
+    };
+
+    useEffect(async () => {
+        setIsLoad(true);
+        setList(await getAllModelById(userId));
+        console.log(list.Data);
+        setTimeout(() => {
+            setIsLoad(false);
+        }, 1000);
+    }, []);
+
+    const currentTableData = useMemo(() => {
+        if (isLoad) return [];
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return list.Data.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, isLoad]);
 
     return (
         <div>
@@ -66,37 +87,41 @@ function Yourmodel() {
                                             </div>
                                         </div>
                                         <div className="table-body">
-                                            {currentTableData.map((item) => {
+                                            {currentTableData.map((item, index) => {
                                                 return (
                                                     <div className="body-row">
                                                         <div className="body-row-data">
-                                                            <span>{item.number}</span>
+                                                            <span>{index}</span>
                                                         </div>
                                                         <div className="body-row-data1">
-                                                            <span>{item.date}</span>
+                                                            <span>{item.Date}</span>
                                                         </div>
 
                                                         <div className="body-row-data1">
-                                                            <span>{item.name}</span>
+                                                            <span>{item.Name}</span>
                                                         </div>
 
                                                         <div className="body-row-data1">
-                                                            <span>{item.status}</span>
+                                                            <span>{item.Status}</span>
                                                         </div>
-                                                        <div className="body-button">
-                                                            <a className="infor-link" href="" role="button">
-                                                                {item.link}
+                                                        <div
+                                                            className="body-button"
+                                                            onClick={() => handleShowDescription(item.Description)}
+                                                        >
+                                                            <a className="infor-link" h role="button">
+                                                                Mô tả
                                                             </a>
                                                         </div>
                                                     </div>
                                                 );
                                             })}
+                                            <DescriptionModal description={description} />
                                         </div>
                                         <div className="pagination-container">
                                             <Pagination
                                                 className="pagination-bar"
                                                 currentPage={currentPage}
-                                                totalCount={data.length}
+                                                totalCount={list.Data.length}
                                                 pageSize={PageSize}
                                                 onPageChange={(page) => setCurrentPage(page)}
                                             />
@@ -111,6 +136,11 @@ function Yourmodel() {
                         </div>
                     )}
                 </div>
+                {isLoad && (
+                    <div className="loading-animation">
+                        <Loading />
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

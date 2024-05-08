@@ -1,4 +1,4 @@
-import { Modal, Input, Col, Card, Row, Select } from 'antd';
+import { Modal, Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { isUploadTrue } from '../../../../components/redux/eventSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,17 +7,52 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { Upload } from 'antd';
+import { handleCreateModel } from '../../../../components/Services/userServices';
+import { message } from 'antd';
 const { Dragger } = Upload;
 
-function PopupAnnotations() {
+function PopupAnnotations(props) {
+    const { name, description } = props;
     const dispatch = useDispatch();
     const check = useSelector((state) => state.eventSlice.isUploadModal);
-    const [isHidden, setIsHidden] = useState(false);
-    const handleHiddenOption = () => {
-        setIsHidden(true);
-    };
+    const [format, setFormat] = useState('');
+    const [content, setContent] = useState('');
+
+    const userRedux = JSON.parse(localStorage.getItem('persist:user'));
+    let userId = JSON.parse(userRedux.authSlice).user.userId;
+
     const onCancel = () => {
-        console.log('cancel');
+        dispatch(isUploadTrue(false));
+    };
+    const handleSelectFile = (info) => {
+        const file = info.file.originFileObj;
+
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            // event.target.result chứa nội dung của tệp dưới dạng ArrayBuffer
+            const fileContent = event.target.result;
+
+            // Chuyển đổi ArrayBuffer thành chuỗi base64
+            const base64String = btoa(String.fromCharCode(...new Uint8Array(fileContent)));
+
+            // Sử dụng base64String theo nhu cầu của bạn, ví dụ: gửi đến máy chủ
+            console.log(base64String);
+            setContent(base64String.toString());
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+    const handleOkUpload = async () => {
+        let data = await handleCreateModel(userId, name, 'wating', description, content, format);
+        console.log(data);
+        dispatch(isUploadTrue(false));
+        dispatch(isUploadTrue('loading'));
+        message.success('Đã thực hiện thành công!');
         dispatch(isUploadTrue(false));
     };
 
@@ -31,18 +66,22 @@ function PopupAnnotations() {
             }
             open={check}
             onCancel={onCancel}
+            onOk={handleOkUpload}
         >
             <div className="modal-body">
                 <div className="import-format">
-                    <div className="title">Import format *</div>
+                    <div className="title">
+                        Import format <span className="force">*</span>
+                    </div>
                     <div className="select-format">
                         <Select
                             className="select-tag"
                             placeholder="Select annotation format"
                             optionFilterProp="children"
+                            onChange={(value) => setFormat(value)}
                             options={[
                                 {
-                                    value: '1',
+                                    value: 'coco',
 
                                     label: (
                                         <>
@@ -55,7 +94,7 @@ function PopupAnnotations() {
                                     ),
                                 },
                                 {
-                                    value: '2',
+                                    value: 'yolo',
                                     label: (
                                         <>
                                             <FontAwesomeIcon
@@ -71,7 +110,7 @@ function PopupAnnotations() {
                     </div>
                 </div>
                 <div className="import-file">
-                    <Dragger>
+                    <Dragger maxCount={1} type="file" onChange={(value) => handleSelectFile(value)}>
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>

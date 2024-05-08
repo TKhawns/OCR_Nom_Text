@@ -12,4 +12,22 @@ const handleSignUpApi = async (email, password, gender, name, phone) => {
     });
 };
 
-export { handleLoginApi, handleSignUpApi };
+const handleCreateModel = async (userId, modelName, status, description, content, format) => {
+    const d = new Date();
+    return axios.post('user/upload-model', {
+        user_id: userId,
+        name: modelName,
+        model_date: d.toLocaleDateString(),
+        status: status,
+        description: description,
+        content: content,
+        format: format,
+    });
+};
+const getAllModelById = async (userId) => {
+    return axios.post('user/get-model', {
+        user_id: userId,
+    });
+};
+
+export { handleLoginApi, handleSignUpApi, handleCreateModel, getAllModelById };

@@ -2,9 +2,10 @@ import './TopBar.scss';
 import { message } from 'antd';
 import { useStoreContext } from '../../contexts/StoreContext';
 import actionTypes from '../../contexts/StoreContext/actionTypes';
-import { annotationTypes, imageTypes } from '../../constants';
+import { annotationTypes, imageTypes, importType } from '../../constants';
 import { getURLExtension, imageSizeFactory, generateCoco, exportZip, generateYolo } from '../../utils';
 import { Menu, Dropdown, Button } from 'antd';
+import JSZip from 'jszip';
 
 function TopBar() {
     const { state, dispatch } = useStoreContext();
@@ -41,8 +42,19 @@ function TopBar() {
             (file) => annotationTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
         );
         console.log(files.length);
-        const msg = files.length > 1 ? `${files.length} images` : `${files.length} image`;
+        const msg = files.length > 1 ? `${files.length} txt` : `${files.length} txt`;
         message.success(`Success to load ${msg}.`);
+    };
+    const onFilesZipChange = async (event) => {
+        const files = [...event.target.files].filter(
+            (file) => importType.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
+        );
+        const msg = files.length > 1 ? `${files.length} zip` : `${files.length} zip`;
+        message.success(`Success to load ${msg}.`);
+        const zip = new JSZip();
+        await zip.loadAsync(files).then(function (data) {
+            console.log(data.files);
+        });
     };
 
     const onSaveClick = () => {
@@ -140,9 +152,9 @@ function TopBar() {
                     <label type="button" className="import-button" style={{ width: '50px' }}>
                         <input
                             type="file"
-                            accept={annotationTypes.map((type) => `.${type}`).join(',')}
+                            accept={importType.map((type) => `.${type}`).join(',')}
                             multiple
-                            onChange={onFilesTxtChange}
+                            onChange={onFilesZipChange}
                             style={{ display: 'none', zIndex: '100' }}
                         />
                         <span className="save-icon">
@@ -212,7 +224,7 @@ function TopBar() {
                 </div>
                 <div className="content-center">
                     <button type="button" className="center-button" onClick={onPrevImageClick}>
-                        <span className="prev-image">
+                        {/* <span className="prev-image">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 aria-hidden="true"
@@ -224,10 +236,11 @@ function TopBar() {
                                 <path d="M239.825 534.975l409.8 400.525c19.75 19.325 51.825 19.325 71.575 0l47.8-46.7c19.75-19.3 19.75-50.55.075-69.875L444.325 500l324.75-318.925A48.675 48.675 0 00769 111.2l-47.8-46.7a51.45 51.45 0 00-71.575 0L239.825 465a48.675 48.675 0 000 69.95z"></path>
                             </svg>
                         </span>
-                        <span>Prev img</span>
+                        <span>Prev img</span> */}
+                        Prev
                     </button>
                     <button type="button" className="center-button" onClick={onNextImageClick}>
-                        <span className="prev-image">
+                        {/* <span className="prev-image">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 aria-hidden="true"
@@ -239,7 +252,8 @@ function TopBar() {
                                 <path d="M769 534.975L359.2 935.5a51.45 51.45 0 01-71.575 0l-47.8-46.7a48.675 48.675 0 01-.075-69.875L564.5 500 239.75 181.075a48.675 48.675 0 01.075-69.875l47.8-46.7a51.45 51.45 0 0171.575 0L769 465c19.75 19.325 19.75 50.625 0 69.95z"></path>
                             </svg>
                         </span>
-                        <span>Next img</span>
+                        <span>Next img</span> */}
+                        Next
                     </button>
                 </div>
 

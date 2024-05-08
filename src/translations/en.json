@@ -69,6 +69,6 @@
     "stepannotate.step3content": " Export to your computer, copy to clipboard, or simply share the image link with others.",
 
     "create.title": "Create your model",
-    "create.enter": "Enter your model name:",
+    "create.enter": "Enter your model name: ",
     "create.send": "Send request"
 }
