@@ -28,6 +28,7 @@ function Yourmodel() {
     };
 
     useEffect(async () => {
+        document.title = 'Danh sách mô hình';
         setIsLoad(true);
         setList(await getAllModelById(userId));
         console.log(list.Data);
@@ -91,7 +92,7 @@ function Yourmodel() {
                                                 return (
                                                     <div className="body-row">
                                                         <div className="body-row-data">
-                                                            <span>{index}</span>
+                                                            <span>{index + 1}</span>
                                                         </div>
                                                         <div className="body-row-data1">
                                                             <span>{item.Date}</span>

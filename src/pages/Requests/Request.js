@@ -6,23 +6,59 @@ import './Request.scss';
 import data from '../Yourmodel/MockData.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { getAllUserModel, updateStatus } from '../../components/Services/adminService';
+import Loading from '../ShareComponent/Loading/Loading';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 let PageSize = 20;
 function RequestPage() {
     const [currentPage, setCurrentPage] = useState(1);
-
-    const currentTableData = useMemo(() => {
-        const firstPageIndex = (currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
-        return data.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
-
-    useEffect(() => {
-        document.title = 'Danh sách yêu cầu';
-    });
+    const [list, setList] = useState({ Data: [] });
+    const [isLoad, setIsLoad] = useState(false);
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
+
+    useEffect(async () => {
+        document.title = 'Danh sách yêu cầu';
+        setIsLoad(true);
+        setList(await getAllUserModel());
+        console.log(list.Data);
+        setTimeout(() => {
+            setIsLoad(false);
+        }, 1000);
+    }, []);
+
+    const currentTableData = useMemo(() => {
+        if (isLoad) return [];
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return list.Data.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, isLoad]);
+
+    const handleDownloadModel = (content) => {
+        saveAs(content, `application.zip`);
+    };
+    const handleOnAccept = async (model_id) => {
+        console.log(model_id);
+        setIsLoad(true);
+        await updateStatus(model_id, 'Đang xử lý');
+        setList(await getAllUserModel());
+        setTimeout(() => {
+            setIsLoad(false);
+        }, 1000);
+    };
+    const handleOnReject = async (model_id) => {
+        console.log(model_id);
+        setIsLoad(true);
+        await updateStatus(model_id, 'Từ chối');
+        setList(await getAllUserModel());
+        setTimeout(() => {
+            setIsLoad(false);
+        }, 1000);
+    };
+
     return (
         <div>
             <Header />
@@ -68,24 +104,27 @@ function RequestPage() {
                                             </div>
                                         </div>
                                         <div className="table-body">
-                                            {currentTableData.map((item) => {
+                                            {currentTableData.map((item, index) => {
                                                 return (
                                                     <div className="body-row">
                                                         <div className="body-row-data">
-                                                            <span>{item.number}</span>
+                                                            <span>{index + 1}</span>
                                                         </div>
                                                         <div className="body-row-data1">
-                                                            <span>{item.date}</span>
-                                                        </div>
-
-                                                        <div className="body-row-data1">
-                                                            <span>{item.name}</span>
+                                                            <span>{item.Date}</span>
                                                         </div>
 
                                                         <div className="body-row-data1">
-                                                            <span>{item.status}</span>
+                                                            <span>{item.Name}</span>
                                                         </div>
+
                                                         <div className="body-row-data1">
+                                                            <span>{item.Status}</span>
+                                                        </div>
+                                                        <div
+                                                            className="body-row-data1"
+                                                            onClick={() => handleDownloadModel(item.Content)}
+                                                        >
                                                             <span>
                                                                 <FontAwesomeIcon
                                                                     className="download"
@@ -93,10 +132,26 @@ function RequestPage() {
                                                                 />
                                                             </span>
                                                         </div>
-                                                        <div className="body-button">
-                                                            <button className="ok-button">Đồng ý</button>
-                                                            <button className="reject-button">Từ chối</button>
-                                                        </div>
+                                                        {item.Status === 'Chờ xử lý' ? (
+                                                            <div className="body-button">
+                                                                <button
+                                                                    className="ok-button"
+                                                                    onClick={() => handleOnAccept(item.Model_id)}
+                                                                >
+                                                                    Đồng ý
+                                                                </button>
+                                                                <button
+                                                                    className="reject-button"
+                                                                    onClick={() => handleOnReject(item.Model_id)}
+                                                                >
+                                                                    Từ chối
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="body-button">
+                                                                <button className="reject-button">Xóa yêu cầu</button>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 );
                                             })}
@@ -105,7 +160,7 @@ function RequestPage() {
                                             <Pagination
                                                 className="pagination-bar"
                                                 currentPage={currentPage}
-                                                totalCount={data.length}
+                                                totalCount={list.Data.length}
                                                 pageSize={PageSize}
                                                 onPageChange={(page) => setCurrentPage(page)}
                                             />
@@ -118,6 +173,11 @@ function RequestPage() {
                         <div className="notuser">Chỉ Quản trị viên mới có thể phê duyệt yêu cầu!</div>
                     )}
                 </div>
+                {isLoad && (
+                    <div className="loading-animation">
+                        <Loading />
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

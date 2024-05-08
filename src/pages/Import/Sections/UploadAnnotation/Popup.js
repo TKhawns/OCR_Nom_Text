@@ -3,7 +3,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { isUploadTrue } from '../../../../components/redux/eventSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import './Popup.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { Upload } from 'antd';
@@ -25,34 +25,53 @@ function PopupAnnotations(props) {
         dispatch(isUploadTrue(false));
     };
     const handleSelectFile = (info) => {
-        const file = info.file.originFileObj;
-
+        let file = info.file.originFileObj;
         if (!file) {
             return;
         }
-
         const reader = new FileReader();
+        reader.addEventListener(
+            'load',
+            function () {
+                // convert file to base64 string using reader.result
+                setContent(reader.result.toString());
+            },
+            false,
+        );
 
-        reader.onload = function (event) {
-            // event.target.result chứa nội dung của tệp dưới dạng ArrayBuffer
-            const fileContent = event.target.result;
+        if (file) {
+            reader.readAsDataURL(file);
+        }
 
-            // Chuyển đổi ArrayBuffer thành chuỗi base64
-            const base64String = btoa(String.fromCharCode(...new Uint8Array(fileContent)));
+        // reader.onload = function (event) {
+        //     // event.target.result chứa nội dung của tệp dưới dạng ArrayBuffer
+        //     let fileContent = event.target.result;
 
-            // Sử dụng base64String theo nhu cầu của bạn, ví dụ: gửi đến máy chủ
-            console.log(base64String);
-            setContent(base64String.toString());
-        };
+        //     // Chuyển đổi ArrayBuffer thành chuỗi base64
+        //     let base64String = btoa(String.fromCharCode(...new Uint8Array(fileContent)));
 
-        reader.readAsArrayBuffer(file);
+        //     // Sử dụng base64String theo nhu cầu của bạn, ví dụ: gửi đến máy chủ
+        //     console.log(base64String);
+        //     //setContent(base64String.toString());
+        // };
+
+        // reader.readAsArrayBuffer(file);
     };
     const handleOkUpload = async () => {
-        let data = await handleCreateModel(userId, name, 'wating', description, content, format);
+        if (format === '') {
+            alert('Vui lòng chọn định dạng!');
+            return;
+        }
+        if (content === '') {
+            alert('Vui lòng tải lên dữ liệu!');
+            return;
+        }
+        let data = await handleCreateModel(userId, name, '', description, content, format);
         console.log(data);
         dispatch(isUploadTrue(false));
         dispatch(isUploadTrue('loading'));
         message.success('Đã thực hiện thành công!');
+        setContent('');
         dispatch(isUploadTrue(false));
     };
 
