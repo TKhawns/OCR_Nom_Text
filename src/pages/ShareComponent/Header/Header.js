@@ -24,7 +24,6 @@ function Header() {
         }
     });
     const handleClickToggle = () => {
-        console.log(document.getElementById('choose-language').value);
         setIsToggle(!isToggle);
     };
 

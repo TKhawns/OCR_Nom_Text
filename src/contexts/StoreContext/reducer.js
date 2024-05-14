@@ -122,7 +122,9 @@ const Reducer = (state, action) => {
                     if (index !== state.selDrawImageIndex) return item;
                     return item.map((subItem, subIndex) => {
                         const newSubItem = cloneDeep(subItem);
+
                         newSubItem.isSelect = subIndex === payload.selShapeIndex;
+                        //newSubItem.isSelect = true;
                         return newSubItem;
                     });
                 }),

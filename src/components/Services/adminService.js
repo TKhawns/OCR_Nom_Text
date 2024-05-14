@@ -9,5 +9,10 @@ const updateStatus = async (model_id, status) => {
         status: status,
     });
 };
+const deleteModel = async (model_id) => {
+    return axios.post('admin/delete-model', {
+        model_id: model_id,
+    });
+};
 
-export { getAllUserModel, updateStatus };
+export { getAllUserModel, updateStatus, deleteModel };

@@ -1,0 +1,51 @@
+{
+    "objects_detection": [
+        {
+            "class": "1747",
+            "confidence": 0.9999188184738159,
+            "coordinate": [
+                { "x": 40, "y": 271 },
+                { "x": 40, "y": 325 },
+                { "x": 95, "y": 325 },
+                { "x": 95, "y": 271 },
+                { "x": 40, "y": 271 }
+            ],
+            "name": "tính",
+            "index": 0,
+            "imageName": "example.png"
+        },
+        {
+            "class": "1977",
+            "confidence": 0.9994763731956482,
+            "coordinate": [
+                { "x": 57, "y": 28 },
+                { "x": 57, "y": 84 },
+                { "x": 106, "y": 84 },
+                { "x": 106, "y": 28 },
+                { "x": 57, "y": 28 }
+            ],
+            "name": "chu",
+            "index": 0,
+            "imageName": "example.png"
+        },
+        {
+            "class": "1977",
+            "confidence": 0.9994763731956482,
+            "coordinate": [
+                { "x": 130, "y": 101 },
+
+                { "x": 130, "y": 130 },
+
+                { "x": 160, "y": 130 },
+
+                { "x": 160, "y": 101 },
+
+                { "x": 130, "y": 101 }
+            ],
+            "name": "chu",
+            "index": 0,
+            "imageName": "truyenkieu.png"
+        }
+    ],
+    "url_image": "https://firebasestorage.googleapis.com/v0/b/smartiot-7389c.appspot.com/o/images%2F2024-05-10_05%3A14%3A46_result.jpg?alt=media"
+}

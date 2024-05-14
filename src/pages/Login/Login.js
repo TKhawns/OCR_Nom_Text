@@ -38,7 +38,8 @@ function Login() {
                 }
                 if (data && data.StatusCode === 200) {
                     dispatch(loginSuccess(data.Data));
-                    navigate(-1);
+                    navigate('/');
+                    navigate(0);
                 }
             }, 2000);
         } catch (e) {
@@ -120,7 +121,7 @@ function Login() {
                             <div className="link-login">
                                 <p>
                                     <FormattedMessage id="login.you" /> {''}
-                                    <a href="/login" className="link">
+                                    <a href="/forgot-pass" className="link">
                                         <FormattedMessage id="login.forgotpassword" />
                                     </a>
                                 </p>

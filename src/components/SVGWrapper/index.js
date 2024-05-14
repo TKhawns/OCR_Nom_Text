@@ -21,6 +21,7 @@ import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
 import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import data from './mocktest.json';
 
 let pointsX = [];
 let pointsY = [];
@@ -57,45 +58,41 @@ function SVGWrapper() {
     const handleZoomIn = () => {
         setScale((scale) => scale + 0.1);
     };
-
     const handleZoomOut = () => {
         setScale((scale) => scale - 0.1);
     };
 
+    // is Insert bounding box?
     const [isInsert, setInsert] = useState(true);
-    let points1 = [
-        { x: 40, y: 271 },
-        { x: 40, y: 325 },
-        { x: 95, y: 325 },
-        { x: 95, y: 271 },
-        { x: 40, y: 271 },
-    ];
-    let points2 = [
-        { x: 57, y: 28 },
-        { x: 57, y: 84 },
-        { x: 106, y: 84 },
-        { x: 106, y: 28 },
-        { x: 57, y: 28 },
-    ];
-    let points3 = [
-        { x: 44, y: 112 },
-        { x: 44, y: 160 },
-        { x: 95, y: 160 },
-        { x: 95, y: 112 },
-        { x: 44, y: 112 },
-    ];
+    //list of object
+    let listObject = data.objects_detection;
+    // Extract coordinates from filtered objects
+    const coordinates = listObject.map((obj) => obj.coordinate);
+    const label = listObject.map((obj) => obj.name);
+    console.log(label);
+
+    // Flatten coordinates array
+    console.log(coordinates);
+
+    useEffect(() => {
+        listObject = data.objects_detection;
+    }, []);
+
     useEffect(async () => {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
         const objURL = window.URL.createObjectURL(imageFiles[selDrawImageIndex]);
         try {
             const size = await getImageSize(objURL);
+            console.log(imageFiles[selDrawImageIndex].name);
             const { width, height } = size;
-            if (selDrawImageIndex === 0 && isInsert) {
-                handleClickPath();
-                setInsert(false);
-            }
 
-            console.log(selDrawImageIndex);
+            listObject.filter((obj, index) => {
+                if (obj.imageName === imageFiles[selDrawImageIndex].name) {
+                    handleClickPath(imageFiles[selDrawImageIndex].name);
+                    listObject.splice(index);
+                }
+            });
+
             dispatch({
                 type: actionTypes.SET_IMAGE_SIZES,
                 payload: {
@@ -174,6 +171,7 @@ function SVGWrapper() {
         const point4 = { x: point3.x, y: point1.y };
 
         currentShapeCopy.paths = [point1, point2, point3, point4, point1];
+        console.log(currentShapeCopy.paths);
         console.log(currentShapeCopy.paths);
         currentShapeCopy.exactPathCount = currentShapeCopy.paths.length - 1;
         currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, false);
@@ -365,9 +363,13 @@ function SVGWrapper() {
     //     return path;
     // };
 
-    const handleClickPath = async () => {
-        // cái này là danh sách tất cả các shapes đang có, phải kiểu dữ liệu mảng
-        const listShape = [shapeFactoryTest(points1), shapeFactoryTest(points2), shapeFactoryTest(points3)];
+    const handleClickPath = async (imageName) => {
+        // danh sách tất cả các shapes đang có, phải kiểu dữ liệu mảng
+        //const listShape = [shapeFactoryTest(coordinates[0]), shapeFactoryTest(coordinates[1])];
+        let listShape = listObject
+            .filter((obj) => obj.imageName === imageName)
+            .map((obj) => shapeFactoryTest(obj.coordinate));
+        let listLabel = listObject.filter((obj) => obj.imageName === imageName);
         for (var i = 0; i < listShape.length; i++) {
             const newShape = listShape[i];
             dispatch({
@@ -382,14 +384,11 @@ function SVGWrapper() {
             let currentShapeCopy = cloneDeep(listShape[i]);
             currentShapeCopy.paths.pop();
             currentShapeCopy.d = getSVGPathD(currentShapeCopy.paths, true);
-            currentShapeCopy.label = 'abc';
+            currentShapeCopy.label = listLabel[i].name;
             shapesCopy[selDrawImageIndex] = [...shapesCopy[selDrawImageIndex], currentShapeCopy];
         }
 
         dispatch({ type: actionTypes.SET_SHAPES, payload: { shapes: shapesCopy } });
-        points1 = [];
-        points2 = [];
-        points3 = [];
     };
 
     return (

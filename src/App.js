@@ -8,6 +8,7 @@ import ImportPage from './pages/Import/Import';
 import Yourmodel from './pages/Yourmodel/Yourmodel';
 import Contact from './pages/Contact/Contact';
 import RequestPage from './pages/Requests/Request';
+import ForgotPass from './pages/ForgotPass/ForgotPass';
 
 function App() {
     return (
@@ -20,8 +21,9 @@ function App() {
                     <Route path="/sign-up" Component={SignUp} />
                     <Route path="/import" Component={ImportPage}></Route>
                     <Route path="/your-model" Component={Yourmodel}></Route>
-                    <Route path="/contact" Component={Contact}></Route>{' '}
+                    <Route path="/contact" Component={Contact}></Route>
                     <Route path="/request" Component={RequestPage}></Route>
+                    <Route path="/forgot-pass" Component={ForgotPass}></Route>
                     {/* Add other routes as needed */}
                 </Routes>
             </div>

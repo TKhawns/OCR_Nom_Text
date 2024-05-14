@@ -20,7 +20,10 @@ function Yourmodel() {
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
     let userData = JSON.parse(userRedux.authSlice).user;
-    let userId = userData.userId;
+    let userId = '';
+    if (userData) {
+        userId = userData.userId;
+    }
 
     const handleShowDescription = (event) => {
         setDescription(event);
@@ -29,15 +32,21 @@ function Yourmodel() {
 
     useEffect(async () => {
         document.title = 'Danh sách mô hình';
-        setIsLoad(true);
-        setList(await getAllModelById(userId));
-        console.log(list.Data);
-        setTimeout(() => {
-            setIsLoad(false);
-        }, 1000);
+        if (userData) {
+            setIsLoad(true);
+            let data = await getAllModelById(userId);
+            if (data === null) {
+                return;
+            }
+            setList(data);
+            setTimeout(() => {
+                setIsLoad(false);
+            }, 1000);
+        }
     }, []);
 
     const currentTableData = useMemo(() => {
+        if (list.Data === null) return [];
         if (isLoad) return [];
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
@@ -47,11 +56,15 @@ function Yourmodel() {
     return (
         <div>
             <Header />
-
+            {isLoad && (
+                <div className="loading-animation">
+                    <Loading />
+                </div>
+            )}
             <div className="yourmodel-container">
                 <div className="yourmodel-content">
                     <div className="yourmodel-title">Danh sách mô hình</div>
-                    {userData ? (
+                    {userData && list.Data !== null ? (
                         <div className="yourmodel-table">
                             <div className="section">
                                 <div className="filter">
@@ -122,7 +135,7 @@ function Yourmodel() {
                                             <Pagination
                                                 className="pagination-bar"
                                                 currentPage={currentPage}
-                                                totalCount={list.Data.length}
+                                                totalCount={list.Data !== null ? list.Data.length : 0}
                                                 pageSize={PageSize}
                                                 onPageChange={(page) => setCurrentPage(page)}
                                             />
@@ -133,15 +146,13 @@ function Yourmodel() {
                         </div>
                     ) : (
                         <div className="notuser">
-                            Bạn chưa có mô hình nào. Hãy đăng nhập để sở hữu và đào tạo mô hình của bạn !
+                            Bạn chưa có mô hình nào!{' '}
+                            <a href="/import" className="create-model">
+                                Tạo mô hình
+                            </a>
                         </div>
                     )}
                 </div>
-                {isLoad && (
-                    <div className="loading-animation">
-                        <Loading />
-                    </div>
-                )}
             </div>
             <Footer />
         </div>

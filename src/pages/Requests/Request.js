@@ -6,7 +6,7 @@ import './Request.scss';
 import data from '../Yourmodel/MockData.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDown } from '@fortawesome/free-solid-svg-icons';
-import { getAllUserModel, updateStatus } from '../../components/Services/adminService';
+import { deleteModel, getAllUserModel, updateStatus } from '../../components/Services/adminService';
 import Loading from '../ShareComponent/Loading/Loading';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -22,12 +22,14 @@ function RequestPage() {
 
     useEffect(async () => {
         document.title = 'Danh sách yêu cầu';
-        setIsLoad(true);
-        setList(await getAllUserModel());
-        console.log(list.Data);
-        setTimeout(() => {
-            setIsLoad(false);
-        }, 1000);
+        if (userData) {
+            setIsLoad(true);
+            setList(await getAllUserModel());
+            console.log(list.Data);
+            setTimeout(() => {
+                setIsLoad(false);
+            }, 1000);
+        }
     }, []);
 
     const currentTableData = useMemo(() => {
@@ -41,7 +43,6 @@ function RequestPage() {
         saveAs(content, `application.zip`);
     };
     const handleOnAccept = async (model_id) => {
-        console.log(model_id);
         setIsLoad(true);
         await updateStatus(model_id, 'Đang xử lý');
         setList(await getAllUserModel());
@@ -50,9 +51,16 @@ function RequestPage() {
         }, 1000);
     };
     const handleOnReject = async (model_id) => {
-        console.log(model_id);
         setIsLoad(true);
         await updateStatus(model_id, 'Từ chối');
+        setList(await getAllUserModel());
+        setTimeout(() => {
+            setIsLoad(false);
+        }, 1000);
+    };
+    const handleOnDelete = async (model_id) => {
+        setIsLoad(true);
+        await deleteModel(model_id);
         setList(await getAllUserModel());
         setTimeout(() => {
             setIsLoad(false);
@@ -66,7 +74,7 @@ function RequestPage() {
             <div className="request-container">
                 <div className="request-content">
                     <div className="request-title">Danh sách yêu cầu</div>
-                    {userData ? (
+                    {userData && list.Data !== null ? (
                         <div className="request-table">
                             <div className="section">
                                 <div className="filter">
@@ -149,7 +157,12 @@ function RequestPage() {
                                                             </div>
                                                         ) : (
                                                             <div className="body-button">
-                                                                <button className="reject-button">Xóa yêu cầu</button>
+                                                                <button
+                                                                    className="reject-button"
+                                                                    onClick={() => handleOnDelete(item.Model_id)}
+                                                                >
+                                                                    Xóa yêu cầu
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </div>

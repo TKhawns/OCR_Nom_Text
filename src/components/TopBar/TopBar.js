@@ -6,11 +6,47 @@ import { annotationTypes, imageTypes, importType } from '../../constants';
 import { getURLExtension, imageSizeFactory, generateCoco, exportZip, generateYolo } from '../../utils';
 import { Menu, Dropdown, Button } from 'antd';
 import JSZip from 'jszip';
+import { prop } from '../../pages/Import/Import';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function TopBar() {
     const { state, dispatch } = useStoreContext();
     const { imageFiles, selDrawImageIndex, imageSizes, txtFiles, selDrawTxtIndex, drawStatus, shapes, selShapeIndex } =
         state;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // if access route not properly
+        // if (!prop) {
+        //     navigate('/');
+        //     navigate(0);
+        // }
+
+        // only allow image file
+        if (!prop) return;
+        const files = [...prop].filter((file) => imageTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1);
+        if (files.length === 0) return;
+
+        const newImageFiles = [...imageFiles, ...files];
+        const newImageSizes = newImageFiles.map((item, index) =>
+            imageSizes[index] ? imageSizes[index] : imageSizeFactory({}),
+        );
+        const newShapes = newImageFiles.map((item, index) => (shapes[index] ? shapes[index] : []));
+        dispatch({
+            type: actionTypes.SET_IMAGE_FILES,
+            payload: {
+                imageFiles: newImageFiles,
+                selDrawImageIndex: imageFiles.length ? selDrawImageIndex : 0,
+                imageSizes: newImageSizes,
+                drawStatus,
+                shapes: newShapes,
+                selShapeIndex,
+            },
+        });
+        const msg = files.length > 1 ? `${files.length} images` : `${files.length} image`;
+        message.success(`Success to load ${msg}.`);
+    }, []);
 
     const onFilesChange = (event) => {
         // only allow image file
@@ -18,6 +54,7 @@ function TopBar() {
             (file) => imageTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
         );
         if (files.length === 0) return;
+
         const newImageFiles = [...imageFiles, ...files];
         const newImageSizes = newImageFiles.map((item, index) =>
             imageSizes[index] ? imageSizes[index] : imageSizeFactory({}),
@@ -46,14 +83,36 @@ function TopBar() {
         message.success(`Success to load ${msg}.`);
     };
     const onFilesZipChange = async (event) => {
-        const files = [...event.target.files].filter(
-            (file) => importType.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
+        // import zip file
+        const filess = event.target.files[0];
+        //const msg = files.length > 1 ? `${files.length} zip` : `${files.length} zip`;
+        //message.success(`Success to load ${msg}.`);
+        //read zip
+        var jsZip = new JSZip();
+        let files = [];
+        jsZip.loadAsync(filess).then((zip) => {
+            // Extract files from the ZIP file
+            Object.keys(zip.files).forEach((filename) => {
+                console.log(zip.files);
+                files.push(zip.files);
+            });
+        });
+        window.URL.createObjectURL(new Blob(files, { type: 'application/zip' }));
+        const newImageFiles = [...imageFiles, ...files];
+        const newImageSizes = newImageFiles.map((item, index) =>
+            imageSizes[index] ? imageSizes[index] : imageSizeFactory({}),
         );
-        const msg = files.length > 1 ? `${files.length} zip` : `${files.length} zip`;
-        message.success(`Success to load ${msg}.`);
-        const zip = new JSZip();
-        await zip.loadAsync(files).then(function (data) {
-            console.log(data.files);
+        const newShapes = newImageFiles.map((item, index) => (shapes[index] ? shapes[index] : []));
+        dispatch({
+            type: actionTypes.SET_IMAGE_FILES,
+            payload: {
+                imageFiles: newImageFiles,
+                selDrawImageIndex: imageFiles.length ? selDrawImageIndex : 0,
+                imageSizes: newImageSizes,
+                drawStatus,
+                shapes: newShapes,
+                selShapeIndex,
+            },
         });
     };
 
@@ -149,7 +208,7 @@ function TopBar() {
                         </span>
                         <span className="tag-name">Open</span>
                     </label>
-                    <label type="button" className="import-button" style={{ width: '50px' }}>
+                    {/* <label type="button" className="import-button" style={{ width: '50px' }}>
                         <input
                             type="file"
                             accept={importType.map((type) => `.${type}`).join(',')}
@@ -167,7 +226,7 @@ function TopBar() {
                             </svg>
                         </span>
                         <span className="tag-name">Open txt</span>
-                    </label>
+                    </label> */}
                     <button type="button" className="save-button" onClick={onSaveClick}>
                         <span className="save-icon">
                             <svg viewBox="0 0 40 40" width="1em" height="1em" xmlns="http://www.w3.org/2000/svg">

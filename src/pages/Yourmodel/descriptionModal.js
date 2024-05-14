@@ -11,11 +11,8 @@ function DescriptionModal(props) {
     const handleOk = () => {
         dispatch(isOpenDescript(false));
     };
-    const handleCancel = () => {
-        dispatch(isOpenDescript(false));
-    };
     return (
-        <Modal title="Mô tả của bạn" open={check} onOk={handleOk} onCancel={handleCancel}>
+        <Modal title="Mô tả của bạn" open={check} onOk={handleOk} cancelButtonProps={{ style: { display: 'none' } }}>
             {description}
         </Modal>
     );

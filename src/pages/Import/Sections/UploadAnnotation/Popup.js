@@ -35,6 +35,7 @@ function PopupAnnotations(props) {
             function () {
                 // convert file to base64 string using reader.result
                 setContent(reader.result.toString());
+                console.log(content);
             },
             false,
         );
