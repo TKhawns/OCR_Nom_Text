@@ -9,6 +9,7 @@ import Yourmodel from './pages/Yourmodel/Yourmodel';
 import Contact from './pages/Contact/Contact';
 import RequestPage from './pages/Requests/Request';
 import ForgotPass from './pages/ForgotPass/ForgotPass';
+import AboutUs from './pages/Aboutus/Aboutus';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/contact" Component={Contact}></Route>
                     <Route path="/request" Component={RequestPage}></Route>
                     <Route path="/forgot-pass" Component={ForgotPass}></Route>
+                    <Route path="/about-us" Component={AboutUs}></Route>
                     {/* Add other routes as needed */}
                 </Routes>
             </div>

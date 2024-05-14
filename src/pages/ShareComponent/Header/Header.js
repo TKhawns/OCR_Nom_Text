@@ -199,7 +199,7 @@ function Header() {
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="link" href="/contact">
+                                        <a className="link" href="/about-us">
                                             <FormattedMessage id="homeheader.aboutus" />
                                         </a>
                                     </li>
