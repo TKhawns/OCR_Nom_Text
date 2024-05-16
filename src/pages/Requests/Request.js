@@ -25,7 +25,6 @@ function RequestPage() {
         if (userData) {
             setIsLoad(true);
             setList(await getAllUserModel());
-            console.log(list.Data);
             setTimeout(() => {
                 setIsLoad(false);
             }, 1000);

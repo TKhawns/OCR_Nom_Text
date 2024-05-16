@@ -8,9 +8,8 @@ import { FormattedMessage } from 'react-intl';
 import { getAllModelById } from '../../components/Services/userServices';
 import { imageTypes } from '../../constants';
 import { useNavigate } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { imageDb } from './Firebase/config';
 import Loading from '../ShareComponent/Loading/Loading';
+import axios from 'axios';
 
 let prop;
 
@@ -35,22 +34,33 @@ function ImportPage() {
     const navigate = useNavigate();
     const onFilesZipChange = async (event) => {
         prop = event.target.files;
+        const formData = new FormData();
+        setIsLoading(true);
+        for (let i = 0; i < prop.length; i++) {
+            formData.append('file', prop[i]);
+            formData.append('upload_preset', 'ocrNom'); // Thay thế bằng upload preset của bạn
 
-        for (const item of Object.keys(prop)) {
-            const storageRef = ref(imageDb, `image_files/${item.name}`);
-            // const metadata = {
-            //     contentType: 'image/png',
-            // };
-            setIsLoading(true);
-            await uploadBytes(storageRef, item).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((url) => {
-                    console.log(url);
-                });
-            });
+            let response = await axios.post('https://api.cloudinary.com/v1_1/dm3pvrs73/image/upload', formData);
+            console.log(response.data.secure_url);
         }
-
         setIsLoading(false);
         navigate('/annotation-tool');
+
+        /* upload images to
+         * firebase storage
+         */
+        // for (const item of Object.keys(prop)) {
+        //     const storageRef = ref(imageDb, `image_files/${item.name}`);
+        //     // const metadata = {
+        //     //     contentType: 'image/png',
+        //     // };
+        //     setIsLoading(true);
+        //     await uploadBytes(storageRef, item).then((snapshot) => {
+        //         getDownloadURL(snapshot.ref).then((url) => {
+        //             console.log(url);
+        //         });
+        //     });
+        // }
     };
 
     return (
@@ -89,13 +99,13 @@ function ImportPage() {
                             )}
                             {userData && list !== null ? (
                                 <select className="toggle">
-                                    <option>Default</option>
+                                    <option>Mặc định</option>
                                     {list.map((item) => (
                                         <option>{item.Name}</option>
                                     ))}
                                 </select>
                             ) : (
-                                <div className="no-choose">Default</div>
+                                <div className="no-choose">Mặc định</div>
                             )}
                         </div>
                         <div className="upload-box">

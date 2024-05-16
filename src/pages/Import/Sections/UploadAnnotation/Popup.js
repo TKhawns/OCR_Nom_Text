@@ -35,7 +35,6 @@ function PopupAnnotations(props) {
             function () {
                 // convert file to base64 string using reader.result
                 setContent(reader.result.toString());
-                console.log(content);
             },
             false,
         );
@@ -68,7 +67,7 @@ function PopupAnnotations(props) {
             return;
         }
         let data = await handleCreateModel(userId, name, '', description, content, format);
-        console.log(data);
+
         dispatch(isUploadTrue(false));
         dispatch(isUploadTrue('loading'));
         message.success('Đã thực hiện thành công!');

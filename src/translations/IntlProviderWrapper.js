@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 function IntlProviderWrapper({ children }) {
     let locale = useSelector((state) => state.appSlice.language);
-    console.log(locale);
+    // console.log(locale);
     let language = English;
     if (locale === 'vi') language = Vietnamese;
     return (

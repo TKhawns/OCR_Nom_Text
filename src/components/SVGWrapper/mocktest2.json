@@ -1,0 +1,61 @@
+[
+    {
+        "image_name": "example.png",
+        "objects_detection": [
+            {
+                "class": "780",
+                "confidence": 0.9997733235359192,
+                "coordinate": [
+                    { "x": 40, "y": 271 },
+                    { "x": 40, "y": 325 },
+                    { "x": 95, "y": 325 },
+                    { "x": 95, "y": 271 },
+                    { "x": 40, "y": 271 }
+                ],
+                "name": "tính"
+            },
+            {
+                "class": "1356",
+                "confidence": 0.06119781732559204,
+                "coordinate": [
+                    { "x": 57, "y": 28 },
+                    { "x": 57, "y": 84 },
+                    { "x": 106, "y": 84 },
+                    { "x": 106, "y": 28 },
+                    { "x": 57, "y": 28 }
+                ],
+                "name": "chu"
+            }
+        ]
+    },
+    {
+        "image_name": "example2.png",
+        "objects_detection": [
+            {
+                "class": "187",
+                "confidence": 0.9365848898887634,
+                "coordinate": [
+                    { "x": 40, "y": 271 },
+                    { "x": 40, "y": 325 },
+                    { "x": 95, "y": 325 },
+                    { "x": 95, "y": 271 },
+                    { "x": 40, "y": 271 }
+                ],
+                "name": "ch"
+            },
+            {
+                "class": "765",
+                "confidence": 0.26810863614082336,
+                "coordinate": [
+                    { "x": 57, "y": 28 },
+                    { "x": 57, "y": 84 },
+                    { "x": 106, "y": 84 },
+                    { "x": 106, "y": 28 },
+                    { "x": 57, "y": 28 }
+                ],
+                "name": "ch"
+            }
+        ],
+        "url_image": "https://firebasestorage.googleapis.com/v0/b/smartiot-7389c.appspot.com/o/images%2F2024-05-11_05%3A55%3A37_result.jpg?alt=media"
+    }
+]

@@ -29,7 +29,6 @@ function SignUp() {
         setPassword(event.target.value);
     };
     const handleOnchangeGender = (event) => {
-        console.log(event.target.value);
         setGender(event.target.value);
     };
     const handleOnchangeName = (event) => {

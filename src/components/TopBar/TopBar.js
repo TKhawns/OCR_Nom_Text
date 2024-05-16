@@ -78,7 +78,7 @@ function TopBar() {
         const files = [...event.target.files].filter(
             (file) => annotationTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
         );
-        console.log(files.length);
+
         const msg = files.length > 1 ? `${files.length} txt` : `${files.length} txt`;
         message.success(`Success to load ${msg}.`);
     };
@@ -93,7 +93,6 @@ function TopBar() {
         jsZip.loadAsync(filess).then((zip) => {
             // Extract files from the ZIP file
             Object.keys(zip.files).forEach((filename) => {
-                console.log(zip.files);
                 files.push(zip.files);
             });
         });
@@ -183,7 +182,7 @@ function TopBar() {
                             <svg viewBox="0 0 40 40" width="1em" height="1em" xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M5 30h30v-3.333H5V30zm0-8.333h30v-3.334H5v3.334zM5 10v3.333h30V10H5z"
-                                    fill-rule="evenodd"
+                                    fillRule="evenodd"
                                 ></path>
                             </svg>
                         </span>
@@ -360,7 +359,7 @@ function TopBar() {
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
                             >
-                                <g clip-path="url(#clip0_1474_17299)" fill="#000">
+                                <g clipPath="url(#clip0_1474_17299)" fill="#000">
                                     <path d="M7.604 4.001a.76.76 0 00-.463.228l-.612.62a.76.76 0 101.082 1.07l.106-.11a.911.911 0 01.648-.27h2.007a1 1 0 01.711.297l.107.108a1 1 0 01.289.703v.875a1 1 0 01-.547.891L8.852 9.47a.768.768 0 00-.416.685v.778c0 .42.34.76.76.76h.106a.655.655 0 00.656-.655c0-.247.138-.472.358-.584L12.584 9.3A.767.767 0 0013 8.616V5.924a.775.775 0 00-.226-.54l-1.14-1.155a.758.758 0 00-.536-.228H7.676a.562.562 0 00-.072 0zm1.593 8.46a.76.76 0 00-.76.761v.017a.76.76 0 101.521 0v-.017a.76.76 0 00-.761-.76z"></path>
                                     <path d="M9.25 0c-4.962 0-9 4.038-9 9s4.038 9 9 9 9-4.038 9-9-4.038-9-9-9zm0 1.5c4.151 0 7.5 3.349 7.5 7.5s-3.349 7.5-7.5 7.5A7.489 7.489 0 011.75 9c0-4.151 3.349-7.5 7.5-7.5z"></path>
                                 </g>
