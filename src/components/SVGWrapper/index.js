@@ -21,10 +21,11 @@ import { drawStatusTypes, labelStatusTypes, shapeTypes } from '../../constants';
 import './SVGWrapper.scss';
 import { faMagnifyingGlassPlus, faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import data from './mocktest.json';
+import { data } from '../../pages/Import/Import';
 import data2 from './mocktest2.json';
 import { imageDb } from './backendFirebase';
 import { ref, get, child } from 'firebase/database';
+import axios from 'axios';
 
 let pointsX = [];
 let pointsY = [];
@@ -68,22 +69,24 @@ function SVGWrapper() {
     // is Insert bounding box?
     const [isInsert, setInsert] = useState(true);
     //list of object
+    let listObject2 = data.data;
+    console.log(listObject2);
+    // let listObject = data.objects_detection;
 
-    let listObject = data.objects_detection;
-    let listObject2 = data2;
     // Extract coordinates from filtered objects
-    const coordinates = listObject.map((obj) => obj.coordinate);
-    const label = listObject.map((obj) => obj.name);
+    // const coordinates = listObject.map((obj) => obj.coordinate);
+    // const label = listObject.map((obj) => obj.name);
 
     useEffect(async () => {
-        const dbRef = ref(imageDb);
-        const snapshot = await get(child(dbRef, 'server_url'));
-        console.log(snapshot);
-    }, []);
+        // listObject = data.objects_detection;
+        listObject2 = data.data;
 
-    useEffect(() => {
-        listObject = data.objects_detection;
-        listObject2 = data2;
+        // const dbRef = ref(imageDb);
+        // const snapshot = await get(child(dbRef, 'server_url'));
+        // listObject2 = await axios.post("snapshot", {
+        //     link: []
+        // })
+        // console.log(snapshot);
     }, []);
 
     useEffect(async () => {
@@ -94,7 +97,7 @@ function SVGWrapper() {
             const { width, height } = size;
 
             listObject2.filter((obj, index) => {
-                if (obj.image_name === imageFiles[selDrawImageIndex].name) {
+                if (obj.image_name.split('.')[0] === imageFiles[selDrawImageIndex].name.split('.')[0]) {
                     handleClickPath(imageFiles[selDrawImageIndex].name);
                     listObject2.splice(index);
                 }
@@ -373,19 +376,26 @@ function SVGWrapper() {
     const handleClickPath = async (imageName) => {
         // danh sách tất cả các shapes đang có, phải kiểu dữ liệu mảng
         //const listShape = [shapeFactoryTest(coordinates[0]), shapeFactoryTest(coordinates[1])];
-        const result = listObject2.find((item) => item.image_name === imageName);
+        const result = await listObject2.find((item) => {
+            let imageWithoutEx = item.image_name.split('.')[0];
+            console.log(imageWithoutEx);
+            let imageNameNew = imageName.split('.')[0];
+            return imageWithoutEx === imageNameNew;
+        });
         let list = [];
         if (result) {
-            list = result.objects_detection.map((obj) => ({
-                coordinate: obj.coordinate,
-                name: obj.name,
-            }));
+            list = result.objects_detection
+                .filter((obj) => obj.confidence > 0.3)
+                .map((obj) => ({
+                    coordinate: obj.coordinate,
+                    name: obj.class,
+                }));
         }
         console.log(list[0].coordinate);
-        let listShape = listObject
-            .filter((obj) => obj.image_name === imageName)
-            .map((obj) => shapeFactoryTest(obj.coordinate));
-        let listLabel = listObject.filter((obj) => obj.imageName === imageName);
+        // let listShape = listObject
+        //     .filter((obj) => obj.image_name === imageName)
+        //     .map((obj) => shapeFactoryTest(obj.coordinate));
+        // let listLabel = listObject.filter((obj) => obj.imageName === imageName);
         // for (var i = 0; i < listShape.length; i++) {
         //     const newShape = listShape[i];
         //     dispatch({

@@ -10,8 +10,11 @@ import { imageTypes } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../ShareComponent/Loading/Loading';
 import axios from 'axios';
+import { imageDb } from '../../components/SVGWrapper/backendFirebase';
+import { ref, get, child } from 'firebase/database';
 
 let prop;
+let data;
 
 function ImportPage() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
@@ -24,6 +27,7 @@ function ImportPage() {
     const handleClick = () => {
         createModelRef.current.scrollIntoView({ behavior: 'smooth' });
     };
+    const [backend, setBackend] = useState('');
 
     useEffect(async () => {
         if (userData) {
@@ -31,7 +35,16 @@ function ImportPage() {
             setList(call.Data);
         }
     }, []);
+    useEffect(async () => {
+        const dbRef = ref(imageDb);
+        const snapshot = await get(child(dbRef, 'server_url'));
+        console.log(snapshot.val());
+        let link = snapshot.val().replace(/^"|"$/g, '');
+        setBackend(link);
+    }, []);
+
     const navigate = useNavigate();
+    let listImage = [];
     const onFilesZipChange = async (event) => {
         prop = event.target.files;
         const formData = new FormData();
@@ -42,7 +55,12 @@ function ImportPage() {
 
             let response = await axios.post('https://api.cloudinary.com/v1_1/dm3pvrs73/image/upload', formData);
             console.log(response.data.secure_url);
+            listImage.push(response.data.secure_url);
         }
+        console.log(backend);
+        data = await axios.post(backend + '/api/detect', {
+            link: listImage,
+        });
         setIsLoading(false);
         navigate('/annotation-tool');
 
@@ -186,4 +204,4 @@ function ImportPage() {
 }
 
 export default ImportPage;
-export { prop };
+export { prop, data };
