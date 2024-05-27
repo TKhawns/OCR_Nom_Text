@@ -7,15 +7,16 @@ import { getURLExtension, imageSizeFactory, generateCoco, exportZip, generateYol
 import { Menu, Dropdown, Button } from 'antd';
 import JSZip from 'jszip';
 import { prop } from '../../pages/Import/Import';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function TopBar() {
     const { state, dispatch } = useStoreContext();
     const { imageFiles, selDrawImageIndex, imageSizes, txtFiles, selDrawTxtIndex, drawStatus, shapes, selShapeIndex } =
         state;
     const navigate = useNavigate();
-
+    const [backend, setBackend] = useState('');
     useEffect(() => {
         // if access route not properly
         // if (!prop) {
@@ -48,8 +49,23 @@ function TopBar() {
         message.success(`Success to load ${msg}.`);
     }, []);
 
-    const onFilesChange = (event) => {
+    let listImage = [];
+    let data;
+    const onFilesChange = async (event) => {
         // only allow image file
+        let abc = event.target.files;
+        const formData = new FormData();
+        for (let i = 0; i < abc.length; i++) {
+            formData.append('file', abc[i]);
+            formData.append('upload_preset', 'ocrNom');
+
+            let response = await axios.post('https://api.cloudinary.com/v1_1/dm3pvrs73/image/upload', formData);
+            console.log(response.data.secure_url);
+            listImage.push(response.data.secure_url);
+        }
+        data = await axios.post(backend + '/api/detect', {
+            link: listImage,
+        });
         const files = [...event.target.files].filter(
             (file) => imageTypes.indexOf(getURLExtension(file.name).toLowerCase()) !== -1,
         );

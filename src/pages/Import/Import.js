@@ -51,7 +51,7 @@ function ImportPage() {
         setIsLoading(true);
         for (let i = 0; i < prop.length; i++) {
             formData.append('file', prop[i]);
-            formData.append('upload_preset', 'ocrNom'); // Thay thế bằng upload preset của bạn
+            formData.append('upload_preset', 'ocrNom');
 
             let response = await axios.post('https://api.cloudinary.com/v1_1/dm3pvrs73/image/upload', formData);
             console.log(response.data.secure_url);

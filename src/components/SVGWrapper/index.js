@@ -26,6 +26,7 @@ import data2 from './mocktest2.json';
 import { imageDb } from './backendFirebase';
 import { ref, get, child } from 'firebase/database';
 import axios from 'axios';
+import Loading from '../../pages/ShareComponent/Loading/Loading';
 
 let pointsX = [];
 let pointsY = [];
@@ -65,7 +66,7 @@ function SVGWrapper() {
     const handleZoomOut = () => {
         setScale((scale) => scale - 0.1);
     };
-
+    const [loading, setLoading] = useState(false);
     // is Insert bounding box?
     const [isInsert, setInsert] = useState(true);
     //list of object
@@ -93,6 +94,7 @@ function SVGWrapper() {
         if (selDrawImageIndex === null || imageFiles.length === 0) return;
         const objURL = window.URL.createObjectURL(imageFiles[selDrawImageIndex]);
         try {
+            setLoading(true);
             const size = await getImageSize(objURL);
             const { width, height } = size;
 
@@ -102,6 +104,7 @@ function SVGWrapper() {
                     listObject2.splice(index);
                 }
             });
+            setLoading(false);
 
             dispatch({
                 type: actionTypes.SET_IMAGE_SIZES,
@@ -433,6 +436,11 @@ function SVGWrapper() {
 
     return (
         <div className="svg-wrapper" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {loading && (
+                <div className="loading-animation">
+                    <Loading />
+                </div>
+            )}
             {imageFiles[selDrawImageIndex] && (
                 <svg
                     className="svg-container"
