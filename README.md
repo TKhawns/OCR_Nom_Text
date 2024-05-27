@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+![image](https://github.com/TKhawns/OCR_Nom_Text/assets/89265725/68bbc96a-5a16-4ba0-87e2-2ef7ee2cd592)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
+# Website recognize SinoNom text. -HANOMIZE-
+Hanomize is an application that integrates a character-level recognition model for Han-Nom characters and an image annotation tool for computer vision. The application's goal is to help organizations and users, especially those researching in the field of Nom script, effectively address practical issues such as digitizing valuable historical documents or studying SinoNom script. This is achieved by using Deep Learning machine learning models.
 
-### `npm start`
+## Features
+- **Character Recognition:** Accurate identification of Han-Nom characters using Deep Learning models.
+- **Image Annotation:** User-friendly annotation tool to label and edit recognized characters.
+- **Document Digitization:** Efficiently export physical documents into digital format.
+  
+## Installation
+### Clone the repository
+```bash
+   git clone https://github.com/TKhawns/OCR_Nom_Text
+```
+### Install packages
+```bash
+   npm install
+```
+### Start Frontend server
+```bash
+   npm start
+```
+## Backend repository
+```bash
+https://github.com/TKhawns/Grab_BE.git
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Supported annotation formats
+| Annotation format                                                                                | Import | Export |
+| ------------------------------------------------------------------------------------------------ | ------ | ------ |
+| [COCO]     | ✔️     | ✔️     |
+| [YOLO]| ✔️     | ✔️     |
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Support
+The application is likely to have bugs and shortcomings. If you encounter any issues, please create an issue or, if you are able, you can submit a pull request to fix the problem. Thank you for your contributions.
