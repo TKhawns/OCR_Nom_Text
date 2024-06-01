@@ -186,3 +186,35 @@
         }
     }
 }
+
+@media only screen and (max-width: 739px) {
+    .import-container {
+        height: 630px;
+        .import-content {
+            max-width: 739px;
+            width: 100%;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            .import-box {
+                align-items: center;
+                max-width: 739px;
+                display: flex;
+                flex-direction: column;
+                width: 90%;
+                .model-option {
+                    width: 100%;
+                    .title {
+                        margin-top: 1em;
+                        text-align: center;
+                        width: 100%;
+                    }
+                }
+                .upload-box {
+                    margin: 1em;
+                    width: 90%;
+                }
+            }
+        }
+    }
+}

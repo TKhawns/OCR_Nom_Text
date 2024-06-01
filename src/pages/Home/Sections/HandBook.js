@@ -12,6 +12,22 @@ function Handbook() {
         slidesToShow: 4,
         slidesToScroll: 1,
         // arrows: false,
+        responsive: [
+            {
+                breakpoint: 980, // tablet breakpoint
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                },
+            },
+            {
+                breakpoint: 739, // mobile breakpoint
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
     };
     return (
         <div className="section-specialty">

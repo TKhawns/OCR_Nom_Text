@@ -123,3 +123,15 @@
         }
     }
 }
+@media only screen and (max-width: 739px) {
+    .create-container {
+        .create-content {
+            .import-box {
+                .upload-box {
+                    margin-left: 1em;
+                    margin-right: 0 !important;
+                }
+            }
+        }
+    }
+}

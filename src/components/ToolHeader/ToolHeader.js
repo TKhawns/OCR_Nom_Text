@@ -18,8 +18,8 @@ function ToolHeader() {
     return (
         <div className="tool-header-container">
             <div className="left-header">
-                <div className="title">Han - Nom</div>
-                <div className="link" onClick={handleGoHome}>
+                <div className="title">Hanomize</div>
+                <div className="link-home" onClick={handleGoHome}>
                     Home
                 </div>
                 <a className="link">Projects</a>

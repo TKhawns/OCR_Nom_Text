@@ -58,3 +58,17 @@
         }
     }
 }
+@media only screen and (max-width: 739px) {
+    .contact-container {
+        .contact-content {
+            .contact-body {
+                display: flex;
+                flex-direction: column;
+                .information {
+                    margin-left: 1em;
+                    padding-top: 1em;
+                }
+            }
+        }
+    }
+}

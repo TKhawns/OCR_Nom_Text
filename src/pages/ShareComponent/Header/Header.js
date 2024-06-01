@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { appLanguage } from '../../../components/redux/appSlice';
 import { useNavigate } from 'react-router-dom';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import NavBar from '../NavBar/NavBar';
 
 function Header() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
@@ -42,6 +44,7 @@ function Header() {
         <div className="header-container">
             <div className="header-content">
                 <div className="header-logo">
+                    <NavBar />
                     <a className="logo-link" href="/">
                         <div className="logo-image">
                             <span className="figure-image">

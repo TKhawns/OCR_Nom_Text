@@ -108,6 +108,9 @@
         opacity: 1;
     }
 }
-// .slick-slide {
-//     padding: 0 15px;
-// }
+
+@media only screen and (max-width: 739px) {
+    .gallery-container {
+        display: none;
+    }
+}

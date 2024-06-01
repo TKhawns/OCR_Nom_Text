@@ -174,3 +174,27 @@
         }
     }
 }
+@media only screen and (max-width: 739px) {
+    .yourmodel-container {
+        .yourmodel-content {
+            .yourmodel-table {
+                .section {
+                    .filter {
+                        .filter-form {
+                            display: flex;
+                            justify-content: space-evenly;
+                            flex-direction: column;
+                            .col1 {
+                                flex: 0 0 auto;
+                                width: 100%;
+                                padding-right: calc(1.5em * 0.5);
+                                padding-left: calc(1.5em * 0.5);
+                                margin-top: 1em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

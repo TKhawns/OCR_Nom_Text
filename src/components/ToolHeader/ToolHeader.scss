@@ -17,6 +17,19 @@
             font-size: 15px;
             font-weight: 600;
         }
+        .link-home {
+            opacity: 0.8;
+            color: #303030;
+            padding: 0 8px;
+            margin-right: 8px;
+            padding-top: 0.01px !important;
+            line-height: 30px;
+            &:hover {
+                cursor: pointer;
+                color: #1d5193;
+                font-weight: 500;
+            }
+        }
         .link {
             opacity: 0.8;
             color: #303030;
@@ -81,6 +94,20 @@
                 &:hover {
                     color: #1d5193;
                 }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 739px) {
+    .tool-header-container {
+        .left-header {
+            .link {
+                display: none;
+            }
+        }
+        .right-header {
+            .model-name {
+                display: none;
             }
         }
     }

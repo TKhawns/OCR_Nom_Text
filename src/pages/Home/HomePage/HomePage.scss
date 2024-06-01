@@ -224,3 +224,21 @@
         }
     }
 }
+
+@media only screen and (max-width: 739px) {
+    .body {
+        .project-content {
+            .project-option {
+                display: flex;
+                flex-direction: column;
+                gap: 2em;
+                .left {
+                    width: 100%;
+                }
+                .right {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

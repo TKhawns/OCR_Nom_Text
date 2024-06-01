@@ -71,7 +71,7 @@ function LabelImg(props) {
                     <TopBar />
                     <Col xs={24} style={{ height: '100%' }}>
                         <Row type="flex" justify="center" style={{ height: '100%' }}>
-                            <Col xs={24} md={1} style={{ maxHeight: '100%', overflow: 'hidden' }}>
+                            <Col className="left-tool" xs={24} md={1} style={{ maxHeight: '100%', overflow: 'hidden' }}>
                                 <LeftToolbar />
                             </Col>
                             <Col xs={24} md={19} style={{}}>

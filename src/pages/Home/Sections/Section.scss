@@ -83,3 +83,21 @@
     background-size: 22px 18px !important;
     text-indent: -9999px !important;
 }
+
+@media only screen and (max-width: 739px) {
+    .section-specialty {
+        .specialty-body {
+            .img-custom {
+                .slide-title {
+                    text-align: center;
+                }
+            }
+        }
+    }
+    .slick-prev {
+        display: none !important;
+    }
+    .slick-next {
+        display: none !important;
+    }
+}

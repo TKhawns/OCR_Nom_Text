@@ -42,7 +42,10 @@ function AboutUs() {
                             </div>
                         </div>
                         <div className="right-context">
-                            <img src="https://cdn0.fahasa.com/media/catalog/product/z/2/z2470841796407_6e7ec53bafe59fd1c2d2114193a36799.jpg" />
+                            <img
+                                className="image"
+                                src="https://cdn0.fahasa.com/media/catalog/product/z/2/z2470841796407_6e7ec53bafe59fd1c2d2114193a36799.jpg"
+                            />
                         </div>
                     </div>
                     <div className="reason">

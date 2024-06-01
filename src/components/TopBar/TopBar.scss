@@ -107,3 +107,29 @@
         }
     }
 }
+
+@media only screen and (max-width: 739px) {
+    .top-bar-container {
+        height: auto;
+        display: flex;
+        padding: 0 !important;
+
+        .top-bar-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            .content-left {
+                justify-content: space-between;
+            }
+            .content-center {
+                margin-top: 8px;
+                border-top: 1px solid gray;
+                justify-content: center;
+            }
+            .content-right {
+                display: none;
+                justify-content: center;
+            }
+        }
+    }
+}
