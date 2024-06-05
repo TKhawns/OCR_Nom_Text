@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin: auto;
     .step-header {
         font-size: 30px;
         line-height: 1.2;
@@ -48,6 +49,29 @@
         }
         .step-arrow2 {
             display: none;
+        }
+    }
+}
+@media only screen and (max-width: 1023px) and (min-width: 740px) {
+    .step-container {
+        .step-content {
+            display: flex;
+            flex-direction: column;
+            .step-arrow {
+                display: none;
+            }
+            .step-arrow2 {
+                display: none;
+            }
+        }
+    }
+}
+@media only screen and (max-width: 1180px) and (min-width: 1024px) {
+    .step-container {
+        .step-content {
+            .step-arrow2 {
+                display: none;
+            }
         }
     }
 }

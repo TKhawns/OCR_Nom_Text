@@ -14,10 +14,10 @@ function Handbook() {
         // arrows: false,
         responsive: [
             {
-                breakpoint: 980, // tablet breakpoint
+                breakpoint: 1023, // tablet breakpoint
                 settings: {
                     slidesToShow: 3,
-                    slidesToScroll: 3,
+                    slidesToScroll: 1,
                 },
             },
             {

@@ -7,7 +7,7 @@ function StepAnnotate() {
             <div className="step-header">
                 <FormattedMessage id="stepannotate.title" />
             </div>
-            <div className="step-content ">
+            <div className="step-content">
                 <div className="step">
                     <div className="step-image">
                         <img src="https://www.gemoo-resource.com/tools/img/image_step1.png" />

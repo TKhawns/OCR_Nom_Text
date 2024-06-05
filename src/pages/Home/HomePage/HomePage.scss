@@ -217,6 +217,8 @@
                     }
                 }
                 .handbook-slider {
+                    width: 90%;
+                    margin: auto;
                     height: 50px;
                     background-color: #fff;
                 }
@@ -237,6 +239,49 @@
                 }
                 .right {
                     width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1023px) and (min-width: 740px) {
+    .body {
+        .project-content {
+            .project-option {
+                .left {
+                    width: 45%;
+                    height: 315px;
+                }
+                .right {
+                    width: 45%;
+                    height: 315px;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1050px) {
+    .body {
+        .project-content {
+            .project-option {
+                .left {
+                    width: 45%;
+                    height: 315px;
+                }
+                .right {
+                    width: 45%;
+                    height: 315px;
+                }
+            }
+        }
+        .handbook-container {
+            .handbook-wrapper {
+                .handbook-content {
+                    .handbook-slider {
+                        width: 88%;
+                        margin: auto;
+                    }
                 }
             }
         }
