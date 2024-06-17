@@ -450,6 +450,8 @@ function SVGWrapper() {
                     onMouseUp={onSVGMouseUp}
                     onMouseDown={onSVGMouseDown}
                     style={{ cursor: 'move' }}
+                    width={imageSizes[selDrawImageIndex].width}
+                    height={imageSizes[selDrawImageIndex].height}
                     transform={`scale(${scale}) translate(${position.x} ${position.y})`}
                 >
                     <SVGImage {...imageProps} />
