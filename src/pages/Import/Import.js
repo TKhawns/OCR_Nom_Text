@@ -12,6 +12,7 @@ import Loading from '../ShareComponent/Loading/Loading';
 import axios from 'axios';
 import { imageDb } from '../../components/SVGWrapper/backendFirebase';
 import { ref, get, child } from 'firebase/database';
+import { alertTitleClasses } from '@mui/material';
 
 let prop;
 let data;
@@ -58,9 +59,19 @@ function ImportPage() {
             listImage.push(response.data.secure_url);
         }
         console.log(backend);
-        data = await axios.post(backend + '/api/detect', {
-            link: listImage,
-        });
+        try {
+            data = await axios.post(backend + '/api/detect', {
+                link: listImage,
+            });
+        } catch (e) {
+            console.log(e);
+            alert(
+                'Vì điều kiện, server Deep learning hiện không hoạt động 24/24! Để trải nghiệm chức năng nhận diện hình ảnh, vui lòng liên hệ Zalo 0382588919.\nXin cảm ơn! ',
+            );
+            setIsLoading(false);
+            return;
+        }
+
         setIsLoading(false);
         navigate('/annotation-tool');
 
