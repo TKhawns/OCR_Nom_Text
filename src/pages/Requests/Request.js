@@ -18,7 +18,10 @@ function RequestPage() {
     const [isLoad, setIsLoad] = useState(false);
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
-    let userData = JSON.parse(userRedux.authSlice).user;
+    let userData = '';
+    if (userRedux) {
+        userData = JSON.parse(userRedux.authSlice).user;
+    }
 
     useEffect(async () => {
         document.title = 'Danh sách yêu cầu';

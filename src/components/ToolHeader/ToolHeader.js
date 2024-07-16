@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 function ToolHeader() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
-    let userData = JSON.parse(userRedux.authSlice).user;
+    let userData = '';
+    if (userRedux) {
+        userData = JSON.parse(userRedux.authSlice).user;
+    }
     const navigate = useNavigate();
     const handleGoHome = () => {
         if (window.confirm('Chắc chắn thoát? Dữ liệu có thể không được lưu!')) {

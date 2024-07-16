@@ -19,7 +19,10 @@ function Yourmodel() {
     const dispatch = useDispatch();
 
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
-    let userData = JSON.parse(userRedux.authSlice).user;
+    let userData = '';
+    if (userRedux) {
+        userData = JSON.parse(userRedux.authSlice).user;
+    }
     let userId = '';
     if (userData) {
         userId = userData.userId;

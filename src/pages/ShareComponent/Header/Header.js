@@ -14,7 +14,10 @@ import NavBar from '../NavBar/NavBar';
 
 function Header() {
     const userRedux = JSON.parse(localStorage.getItem('persist:user'));
-    let userData = JSON.parse(userRedux.authSlice).user;
+    let userData = '';
+    if (userRedux) {
+        userData = JSON.parse(userRedux.authSlice).user;
+    }
 
     const [isToggle, setIsToggle] = useState(false);
     const [selectedLang, setSelectedLang] = useState(true);
